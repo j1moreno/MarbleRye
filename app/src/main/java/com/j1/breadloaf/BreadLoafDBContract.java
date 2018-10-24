@@ -1,3 +1,5 @@
+package com.j1.breadloaf;
+
 import android.provider.BaseColumns;
 
 public final class BreadLoafDBContract {
