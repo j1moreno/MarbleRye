@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -46,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
         TextView spendToday = findViewById(R.id.textViewSpendToday);
         spendToday.setText("$" + String.valueOf(getTodaySpending()));
 
+        TextView spendAverage = findViewById(R.id.textViewSpendAvg);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        decimalFormat.setRoundingMode(RoundingMode.CEILING);
+        spendAverage.setText("$" + decimalFormat.format(getAverageDailySpending()));
+
         Button buttonReadDB = findViewById(R.id.buttonReadDB);
         buttonReadDB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         TextView spendToday = findViewById(R.id.textViewSpendToday);
         spendToday.setText("$" + String.valueOf(getTodaySpending()));
+        TextView spendAverage = findViewById(R.id.textViewSpendAvg);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        decimalFormat.setRoundingMode(RoundingMode.CEILING);
+        spendAverage.setText("$" + decimalFormat.format(getAverageDailySpending()));
         super.onResume();
     }
 
@@ -134,5 +145,34 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "total:  " + total);
 
         return total;
+    }
+
+    private double getAverageDailySpending() {
+        double average = 0.00;
+        double total = 0.00;
+        int days = 0;
+        long currentDate = 0;
+        SQLiteDatabase database = new BreadLoafDBHelper(this).getReadableDatabase();
+        Cursor cursor = database.rawQuery("select * from "+BreadLoafDBContract.Expenses.TABLE_NAME,null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                double value = Double.valueOf(cursor.getString(2));
+                long temp = cursor.getLong(cursor.getColumnIndexOrThrow(BreadLoafDBContract.Expenses.COLUMN_DATE));
+                Log.d(TAG, "date:  " + temp);
+                if (temp != currentDate) {
+                    currentDate = temp;
+                    days++;
+                }
+                Log.d(TAG, "value:  " + value);
+                total += value;
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        Log.d(TAG, "days:  " + days);
+        average = total/days;
+
+
+        return average;
     }
 }

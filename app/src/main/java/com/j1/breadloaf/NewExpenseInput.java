@@ -17,6 +17,7 @@ import java.util.Date;
 public class NewExpenseInput extends AppCompatActivity {
 
     private static final String TAG = "NewExpenseActivity";
+    private int incrementAmount = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class NewExpenseInput extends AppCompatActivity {
     private void increaseAmount() {
         EditText editTextAmount = findViewById(R.id.editText_amount);
         double currentValue = Double.valueOf(editTextAmount.getText().toString());
-        double newValue = currentValue + 5;
+        double newValue = currentValue + incrementAmount;
         editTextAmount.setText(String.valueOf(newValue));
     }
 
@@ -95,7 +96,7 @@ public class NewExpenseInput extends AppCompatActivity {
         EditText editTextAmount = findViewById(R.id.editText_amount);
         double currentValue = Double.valueOf(editTextAmount.getText().toString());
         if (currentValue <= 0) return;
-        double newValue = currentValue - 5;
+        double newValue = currentValue - incrementAmount;
         editTextAmount.setText(String.valueOf(newValue));
     }
 }
