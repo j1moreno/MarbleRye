@@ -36,36 +36,38 @@ public class ReadDBActivity extends AppCompatActivity {
 
         long date = 0;
         String response = "";
-
-        try {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime((new SimpleDateFormat("dd/MM/yyyy")).parse(
-                    dateSearch.getText().toString()));
-            date = calendar.getTimeInMillis();
-        }
-        catch (Exception e) {
-            Toast.makeText(this, "invalid date input!", Toast.LENGTH_SHORT).show();
-        }
-
         SQLiteDatabase database = new BreadLoafDBHelper(this).getReadableDatabase();
+        Cursor cursor = null;
 
-        String[] projection = {};
+        if (dateSearch.getText().toString().equals("")) {
+            cursor = database.rawQuery("select * from "+BreadLoafDBContract.Expenses.TABLE_NAME,null);
+        } else {
+            try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime((new SimpleDateFormat("dd/MM/yyyy")).parse(
+                        dateSearch.getText().toString()));
+                date = calendar.getTimeInMillis();
+            }
+            catch (Exception e) {
+                Toast.makeText(this, "invalid date input!", Toast.LENGTH_SHORT).show();
+            }
+            String[] projection = {};
 
-        String selection =  BreadLoafDBContract.Expenses.COLUMN_DATE + " == ?";
+            String selection =  BreadLoafDBContract.Expenses.COLUMN_DATE + " == ?";
 
-        String[] selectionArgs = {date + ""};
+            String[] selectionArgs = {date + ""};
 
-        Cursor cursor = database.query(
-                BreadLoafDBContract.Expenses.TABLE_NAME,     // The table to query
-                null,                               // The columns to return
-                selection,                                // The columns for the WHERE clause
-                selectionArgs,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                      // don't sort
-        );
+            cursor = database.query(
+                    BreadLoafDBContract.Expenses.TABLE_NAME,     // The table to query
+                    null,                               // The columns to return
+                    selection,                                // The columns for the WHERE clause
+                    selectionArgs,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    null                                      // don't sort
+            );
+        }
 
-//        Cursor cursor = database.rawQuery("select * from "+BreadLoafDBContract.Expenses.TABLE_NAME,null);
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 String name = cursor.getString(0) + " | " + cursor.getString(1) + " | " + cursor.getString(2);
@@ -76,7 +78,6 @@ public class ReadDBActivity extends AppCompatActivity {
                 response += name;
                 cursor.moveToNext();
             }
-            index = 0;
         }
 //        Toast.makeText(this, response, Toast.LENGTH_LONG).show();
         TextView textView = findViewById(R.id.textView);
