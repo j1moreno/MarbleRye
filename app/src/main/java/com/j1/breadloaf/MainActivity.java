@@ -148,30 +148,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private double getAverageDailySpending() {
-        double average = 0.00;
+        double average;
         double total = 0.00;
-        int days = 0;
+        int days;
         long currentDate = 0;
+        long firstDate = 0;
+        boolean firstEntry = true;
+        // init database
         SQLiteDatabase database = new BreadLoafDBHelper(this).getReadableDatabase();
+        // query for all entries
         Cursor cursor = database.rawQuery("select * from "+BreadLoafDBContract.Expenses.TABLE_NAME,null);
+        // read data retrieved from DB
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 double value = Double.valueOf(cursor.getString(2));
-                long temp = cursor.getLong(cursor.getColumnIndexOrThrow(BreadLoafDBContract.Expenses.COLUMN_DATE));
-                Log.d(TAG, "date:  " + temp);
-                if (temp != currentDate) {
-                    currentDate = temp;
-                    days++;
+                if (firstEntry) {
+                    // if first entry contains first date
+                    firstDate = cursor.getLong(cursor.getColumnIndexOrThrow(BreadLoafDBContract.Expenses.COLUMN_DATE));
+                    firstEntry = false; // set flag, no longer first entry
                 }
-                Log.d(TAG, "value:  " + value);
-                total += value;
+                total += value; // add up every value in DB
                 cursor.moveToNext();
             }
         }
         cursor.close();
+        try {
+            currentDate = getTodaysDateInMillis();
+        } catch (Exception e) {
+            Log.d(TAG, e.toString());
+        }
+        // days is currentDate - firstDate, divided by MS in a day; add one to include today
+        days = (int) ((currentDate-firstDate)/86400000) + 1;    // include today
+        Log.d(TAG, "currentDate:  " + currentDate);
+        Log.d(TAG, "firstDate:  " + firstDate);
         Log.d(TAG, "days:  " + days);
+        Log.d(TAG, "difference: " + (currentDate-firstDate));
         average = total/days;
-
 
         return average;
     }
