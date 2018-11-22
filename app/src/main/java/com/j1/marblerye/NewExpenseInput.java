@@ -57,7 +57,7 @@ public class NewExpenseInput extends AppCompatActivity {
     }
 
     private void saveToDB() {
-        SQLiteDatabase database = new BreadLoafDBHelper(this).getWritableDatabase();
+        SQLiteDatabase database = new MarbleDBHelper(this).getWritableDatabase();
 
         // get data from inputs
         EditText amountInput = findViewById(R.id.editText_amount);
@@ -65,22 +65,22 @@ public class NewExpenseInput extends AppCompatActivity {
         EditText dateInput = findViewById(R.id.editText_date);
 
         ContentValues values = new ContentValues();
-        values.put(BreadLoafDBContract.Expenses.COLUMN_AMOUNT, amountInput.getText().toString());
-        values.put(BreadLoafDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString());
+        values.put(MarbleDBContract.Expenses.COLUMN_AMOUNT, amountInput.getText().toString());
+        values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString());
 
         try {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime((new SimpleDateFormat("dd/MM/yyyy")).parse(
                     dateInput.getText().toString()));
             long date = calendar.getTimeInMillis();
-            values.put(BreadLoafDBContract.Expenses.COLUMN_DATE, date);
+            values.put(MarbleDBContract.Expenses.COLUMN_DATE, date);
         }
         catch (Exception e) {
             Log.e(TAG, "Error", e);
             Toast.makeText(this, "Date is in the wrong format", Toast.LENGTH_LONG).show();
             return;
         }
-        long newRowId = database.insert(BreadLoafDBContract.Expenses.TABLE_NAME, null, values);
+        long newRowId = database.insert(MarbleDBContract.Expenses.TABLE_NAME, null, values);
 
         Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_LONG).show();
     }

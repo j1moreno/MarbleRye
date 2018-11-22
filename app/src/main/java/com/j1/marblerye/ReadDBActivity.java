@@ -38,11 +38,11 @@ public class ReadDBActivity extends AppCompatActivity {
 
         long date = 0;
         String response = "";
-        SQLiteDatabase database = new BreadLoafDBHelper(this).getReadableDatabase();
+        SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
         Cursor cursor = null;
 
         if (dateSearch.getText().toString().equals("")) {
-            cursor = database.rawQuery("select * from "+BreadLoafDBContract.Expenses.TABLE_NAME,null);
+            cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
         } else {
             try {
                 Calendar calendar = Calendar.getInstance();
@@ -55,12 +55,12 @@ public class ReadDBActivity extends AppCompatActivity {
             }
             String[] projection = {};
 
-            String selection =  BreadLoafDBContract.Expenses.COLUMN_DATE + " == ?";
+            String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " == ?";
 
             String[] selectionArgs = {date + ""};
 
             cursor = database.query(
-                    BreadLoafDBContract.Expenses.TABLE_NAME,     // The table to query
+                    MarbleDBContract.Expenses.TABLE_NAME,     // The table to query
                     null,                               // The columns to return
                     selection,                                // The columns for the WHERE clause
                     selectionArgs,                            // The values for the WHERE clause
@@ -70,9 +70,9 @@ public class ReadDBActivity extends AppCompatActivity {
             );
         }
         String[] fromColums = {
-                BreadLoafDBContract.Expenses.COLUMN_AMOUNT,
-                BreadLoafDBContract.Expenses.COLUMN_DESCRIPTION,
-                BreadLoafDBContract.Expenses.COLUMN_DATE
+                MarbleDBContract.Expenses.COLUMN_AMOUNT,
+                MarbleDBContract.Expenses.COLUMN_DESCRIPTION,
+                MarbleDBContract.Expenses.COLUMN_DATE
         };
         int[] toViews = {
                 R.id.textViewAmt,

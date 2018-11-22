@@ -2,9 +2,9 @@ package com.j1.marblerye;
 
 import android.provider.BaseColumns;
 
-public final class BreadLoafDBContract {
+public final class MarbleDBContract {
 
-    private BreadLoafDBContract() {
+    private MarbleDBContract() {
     }
 
     public static class Expenses implements BaseColumns {

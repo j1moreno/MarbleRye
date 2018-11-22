@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
     private double getTodaySpending() {
         // query db for all values entered today
-        SQLiteDatabase database = new BreadLoafDBHelper(this).getReadableDatabase();
+        SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
         long date = 0;
         try {
             date = getTodaysDateInMillis();
@@ -117,12 +117,12 @@ public class MainActivity extends AppCompatActivity {
         }
         String[] projection = {};
 
-        String selection =  BreadLoafDBContract.Expenses.COLUMN_DATE + " == ?";
+        String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " == ?";
 
         String[] selectionArgs = {date + ""};
 
         Cursor cursor = database.query(
-                BreadLoafDBContract.Expenses.TABLE_NAME,     // The table to query
+                MarbleDBContract.Expenses.TABLE_NAME,     // The table to query
                 null,                               // The columns to return
                 selection,                                // The columns for the WHERE clause
                 selectionArgs,                            // The values for the WHERE clause
@@ -155,16 +155,16 @@ public class MainActivity extends AppCompatActivity {
         long firstDate = 0;
         boolean firstEntry = true;
         // init database
-        SQLiteDatabase database = new BreadLoafDBHelper(this).getReadableDatabase();
+        SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
         // query for all entries
-        Cursor cursor = database.rawQuery("select * from "+BreadLoafDBContract.Expenses.TABLE_NAME,null);
+        Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
         // read data retrieved from DB
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 double value = Double.valueOf(cursor.getString(2));
                 if (firstEntry) {
                     // if first entry contains first date
-                    firstDate = cursor.getLong(cursor.getColumnIndexOrThrow(BreadLoafDBContract.Expenses.COLUMN_DATE));
+                    firstDate = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
                     firstEntry = false; // set flag, no longer first entry
                 }
                 total += value; // add up every value in DB
