@@ -23,7 +23,7 @@ public class ReadDBActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_db);
-
+        readFromDB();   // show all entries as soon as activity is started
         Button getData = findViewById(R.id.button2);
         getData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,7 +44,8 @@ public class ReadDBActivity extends AppCompatActivity {
         if (dateSearch.getText().toString().equals("")) {
             cursor = database.rawQuery(
                     "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
-                            " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " desc",null);
+                            " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " desc",
+                    null);
         } else {
             try {
                 Calendar calendar = Calendar.getInstance();
@@ -81,8 +82,8 @@ public class ReadDBActivity extends AppCompatActivity {
                 R.id.textViewDesc,
                 R.id.textViewDate
         };
-        SimpleCursorAdapter adapter = new MarbleCursorAdapter(this, R.layout.database_read_item,
-                cursor, fromColums, toViews, 0);
+        SimpleCursorAdapter adapter = new MarbleCursorAdapter(this,
+                R.layout.database_read_item, cursor, fromColums, toViews, 0);
         ListView listView = findViewById(R.id.listViewDB);
         listView.setAdapter(adapter);
     }
