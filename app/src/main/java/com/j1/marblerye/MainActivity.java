@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TextView spendToday = findViewById(R.id.textViewSpendToday);
-        spendToday.setText("$" + String.valueOf(getTodaySpending()));
+        spendToday.setText("$" + String.format("%.2f", getTodaySpending()));
 
         TextView spendAverage = findViewById(R.id.textViewSpendAvg);
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onResume() {
         TextView spendToday = findViewById(R.id.textViewSpendToday);
-        spendToday.setText("$" + String.valueOf(getTodaySpending()));
+        spendToday.setText("$" + String.format("%.2f", getTodaySpending()));
         TextView spendAverage = findViewById(R.id.textViewSpendAvg);
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
         decimalFormat.setRoundingMode(RoundingMode.CEILING);
         spendAverage.setText("$" + decimalFormat.format(getAverageDailySpending()));
         super.onResume();
