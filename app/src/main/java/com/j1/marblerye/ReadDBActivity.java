@@ -42,7 +42,9 @@ public class ReadDBActivity extends AppCompatActivity {
         Cursor cursor = null;
 
         if (dateSearch.getText().toString().equals("")) {
-            cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
+            cursor = database.rawQuery(
+                    "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
+                            " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " desc",null);
         } else {
             try {
                 Calendar calendar = Calendar.getInstance();
