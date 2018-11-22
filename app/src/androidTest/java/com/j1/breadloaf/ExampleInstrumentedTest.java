@@ -1,4 +1,4 @@
-package com.j1.breadloaf;
+package com.j1.marblerye;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.j1.breadloaf", appContext.getPackageName());
+        assertEquals("com.j1.marblerye", appContext.getPackageName());
     }
 }

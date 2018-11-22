@@ -4,7 +4,7 @@ android {
     dataBinding.enabled = true
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.j1.breadloaf"
+        applicationId "com.j1.marblerye"
         minSdkVersion 24
         targetSdkVersion 26
         versionCode 1
