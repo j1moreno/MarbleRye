@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         spendToday.setText("$" + String.valueOf(getTodaySpending()));
 
         TextView spendAverage = findViewById(R.id.textViewSpendAvg);
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
         decimalFormat.setRoundingMode(RoundingMode.CEILING);
         spendAverage.setText("$" + decimalFormat.format(getAverageDailySpending()));
 

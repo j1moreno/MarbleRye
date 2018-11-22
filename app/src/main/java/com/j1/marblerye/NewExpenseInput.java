@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,7 +19,7 @@ import java.util.Date;
 public class NewExpenseInput extends AppCompatActivity {
 
     private static final String TAG = "NewExpenseActivity";
-    private int incrementAmount = 1;
+    private double incrementAmount = 1.00;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +91,7 @@ public class NewExpenseInput extends AppCompatActivity {
         EditText editTextAmount = findViewById(R.id.editText_amount);
         double currentValue = Double.valueOf(editTextAmount.getText().toString());
         double newValue = currentValue + incrementAmount;
-        editTextAmount.setText(String.valueOf(newValue));
+        editTextAmount.setText(String.format("%.2f", newValue));
     }
 
     private void decreaseAmount() {
@@ -97,6 +99,6 @@ public class NewExpenseInput extends AppCompatActivity {
         double currentValue = Double.valueOf(editTextAmount.getText().toString());
         if (currentValue <= 0) return;
         double newValue = currentValue - incrementAmount;
-        editTextAmount.setText(String.valueOf(newValue));
+        editTextAmount.setText(String.format("%.2f", newValue));
     }
 }
