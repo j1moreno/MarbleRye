@@ -1,6 +1,7 @@
 package com.j1.marblerye;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -84,7 +85,9 @@ public class NewExpenseInput extends AppCompatActivity {
         }
         long newRowId = database.insert(MarbleDBContract.Expenses.TABLE_NAME, null, values);
 
-        Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(NewExpenseInput.this, MainActivity.class);
+        startActivity(intent);
     }
 
     private void increaseAmount() {
