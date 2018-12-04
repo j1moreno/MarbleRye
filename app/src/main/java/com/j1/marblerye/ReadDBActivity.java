@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,6 +30,19 @@ public class ReadDBActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 readFromDB();
+            }
+        });
+        final ListView listView = findViewById(R.id.listViewDB);
+        // set listener for list view
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
+            {
+                Cursor selectedItem = (Cursor) listView.getItemAtPosition(position);
+                String itemRowId = selectedItem.getString(selectedItem.getColumnIndexOrThrow(MarbleDBContract.Expenses._ID));
+                Toast.makeText(getApplicationContext(), itemRowId, Toast.LENGTH_SHORT).show();
+                // @todo: send entry data to new activity where it can be updated
             }
         });
     }
