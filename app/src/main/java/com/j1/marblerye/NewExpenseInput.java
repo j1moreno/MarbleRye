@@ -86,8 +86,7 @@ public class NewExpenseInput extends AppCompatActivity {
         long newRowId = database.insert(MarbleDBContract.Expenses.TABLE_NAME, null, values);
 
         Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(NewExpenseInput.this, MainActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     private void increaseAmount() {
