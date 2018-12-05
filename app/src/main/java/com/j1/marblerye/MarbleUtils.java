@@ -10,15 +10,11 @@ public class MarbleUtils {
 
     private static final String TAG = "MarbleUtils";
 
-    public static boolean isDateInCorrectFormat(String date) {
-        try {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime((new SimpleDateFormat("dd/MM/yyyy")).parse(date));
-        }
-        catch (Exception e) {
-            return false;
-        }
-        return true;
+    public static String convertLongToDate(long input) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(input);
+
+        return new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
     }
 
     public static long convertDateToLongOrThrow(String date) throws ParseException {

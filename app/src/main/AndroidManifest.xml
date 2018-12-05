@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ReadDBActivity" />
-        <activity android:name=".NewExpenseInput"></activity>
+        <activity android:name=".NewExpenseInput" />
+        <activity android:name=".EditExpenseActivity"></activity>
     </application>
 
 </manifest>

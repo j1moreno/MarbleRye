@@ -1,5 +1,6 @@
 package com.j1.marblerye;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -39,10 +40,20 @@ public class ReadDBActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
             {
+                // get cursor for selected item
                 Cursor selectedItem = (Cursor) listView.getItemAtPosition(position);
+                // get all fields from cursor for editing
                 String itemRowId = selectedItem.getString(selectedItem.getColumnIndexOrThrow(MarbleDBContract.Expenses._ID));
-                Toast.makeText(getApplicationContext(), itemRowId, Toast.LENGTH_SHORT).show();
-                // @todo: send entry data to new activity where it can be updated
+                String itemAmount = selectedItem.getString(selectedItem.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_AMOUNT));
+                String itemDescription = selectedItem.getString(selectedItem.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DESCRIPTION));
+                long itemDate = selectedItem.getLong(selectedItem.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
+                // put fields into intent to pass to edit activity
+                Intent intent = new Intent(ReadDBActivity.this, EditExpenseActivity.class);
+                intent.putExtra("ID", itemRowId);
+                intent.putExtra("AMOUNT", itemAmount);
+                intent.putExtra("DESCRIPTION", itemDescription);
+                intent.putExtra("DATE", itemDate);
+                startActivity(intent);
             }
         });
     }
