@@ -78,10 +78,7 @@ public class ReadDBActivity extends AppCompatActivity {
         } else {
             // check to see if valid date was entered
             try {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime((new SimpleDateFormat("dd/MM/yyyy")).parse(
-                        searchBox.getText().toString()));
-                date = calendar.getTimeInMillis();
+                date = MarbleUtils.convertDateToLongOrThrow(searchBox.getText().toString());
 
                 // exception wasn't thrown, start building db query
                 String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " == ?";
