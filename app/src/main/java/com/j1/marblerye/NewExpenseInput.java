@@ -69,20 +69,22 @@ public class NewExpenseInput extends AppCompatActivity {
 
         ContentValues values = new ContentValues();
         values.put(MarbleDBContract.Expenses.COLUMN_AMOUNT, amountInput.getText().toString());
-        values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString());
-
-        try {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime((new SimpleDateFormat("dd/MM/yyyy")).parse(
-                    dateInput.getText().toString()));
-            long date = calendar.getTimeInMillis();
-            values.put(MarbleDBContract.Expenses.COLUMN_DATE, date);
-        }
-        catch (Exception e) {
-            Log.e(TAG, "Error", e);
+        // check to see if description has been entered, otherwise don't add entry
+        if (descriptionInput.getText().toString().isEmpty()) {
             Toast.makeText(this, "Date is in the wrong format", Toast.LENGTH_LONG).show();
             return;
         }
+        values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString());
+        // make sure date is properly entered, otherwise don't add entry
+        try {
+            long date = MarbleUtils.convertDateToLongOrThrow(dateInput.getText().toString());
+            values.put(MarbleDBContract.Expenses.COLUMN_DATE, date);
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Date is in the wrong format", Toast.LENGTH_LONG).show();
+            return;
+        }
+        // got to this line, so it's OK to add entry to database
         long newRowId = database.insert(MarbleDBContract.Expenses.TABLE_NAME, null, values);
 
         Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_SHORT).show();
