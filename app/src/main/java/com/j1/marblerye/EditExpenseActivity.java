@@ -18,6 +18,8 @@ public class EditExpenseActivity extends AppCompatActivity {
     private EditText date;
     private String id;
 
+    private double changeAmount = 1.00;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,5 +66,36 @@ public class EditExpenseActivity extends AppCompatActivity {
                 finish();
             }
         });
+        // set click listeners for increment/decrement buttons:
+        Button buttonPlus = findViewById(R.id.buttonPlus);
+        buttonPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                increaseAmount();
+            }
+        });
+
+        Button buttonMinus = findViewById(R.id.buttonMinus);
+        buttonMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                decreaseAmount();
+            }
+        });
+    }
+
+    private void increaseAmount() {
+        EditText editTextAmount = findViewById(R.id.editText_amount);
+        double currentValue = Double.valueOf(editTextAmount.getText().toString());
+        double newValue = currentValue + changeAmount;
+        editTextAmount.setText(String.format("%.2f", newValue));
+    }
+
+    private void decreaseAmount() {
+        EditText editTextAmount = findViewById(R.id.editText_amount);
+        double currentValue = Double.valueOf(editTextAmount.getText().toString());
+        if (currentValue <= 0) return;
+        double newValue = currentValue - changeAmount;
+        editTextAmount.setText(String.format("%.2f", newValue));
     }
 }
