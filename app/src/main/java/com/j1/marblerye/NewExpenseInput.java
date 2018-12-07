@@ -71,7 +71,7 @@ public class NewExpenseInput extends AppCompatActivity {
         values.put(MarbleDBContract.Expenses.COLUMN_AMOUNT, amountInput.getText().toString());
         // check to see if description has been entered, otherwise don't add entry
         if (descriptionInput.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Date is in the wrong format", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Must enter a description!", Toast.LENGTH_LONG).show();
             return;
         }
         values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString());
