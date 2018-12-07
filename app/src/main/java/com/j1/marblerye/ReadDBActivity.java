@@ -58,6 +58,12 @@ public class ReadDBActivity extends AppCompatActivity {
         });
     }
 
+    protected void onResume() {
+        // read database again in case anything changed
+        readFromDB();
+        super.onResume();
+    }
+
     private void readFromDB() {
         EditText searchBox = findViewById(R.id.editText_dateSearch);
 
