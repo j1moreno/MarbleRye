@@ -1,31 +1,68 @@
 package com.j1.marblerye;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditExpenseActivity extends AppCompatActivity {
+
+    private EditText amount;
+    private EditText description;
+    private EditText date;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // get extras from intent
         Bundle extras = getIntent().getExtras();
+        // get row id for selected entry, we'll need this later
+        id = extras.getString("ID", "");
         // layout is exactly new expense input, with a few tweaks
         setContentView(R.layout.activity_new_expense_input);
         // set EditText fields to be current entry values, passed from intent
-        EditText amount = findViewById(R.id.editText_amount);
+        amount = findViewById(R.id.editText_amount);
         amount.setText(extras.getString("AMOUNT"));
-        EditText description = findViewById(R.id.editText_description);
+        description = findViewById(R.id.editText_description);
         description.setText(extras.getString("DESCRIPTION"));
-        EditText date = findViewById(R.id.editText_date);
+        date = findViewById(R.id.editText_date);
         date.setText(MarbleUtils.convertLongToDate(extras.getLong("DATE")));
         // Edit button to say update instead of add
         Button button = findViewById(R.id.button);
         button.setText("Update Entry");
-        // @todo: add listener to update entry
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContentValues values = new ContentValues();
+                values.put(MarbleDBContract.Expenses.COLUMN_AMOUNT, amount.getText().toString());
+                // check to see if description has been entered, otherwise don't add entry
+                if (description.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Must enter a description!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, description.getText().toString());
+                // make sure date is properly entered, otherwise don't add entry
+                try {
+                    long longDate = MarbleUtils.convertDateToLongOrThrow(date.getText().toString());
+                    values.put(MarbleDBContract.Expenses.COLUMN_DATE, longDate);
+                }
+                catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Date is in the wrong format", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                // get writable database to update entry:
+                SQLiteDatabase database = new MarbleDBHelper(getApplicationContext()).getWritableDatabase();
+                database.update(MarbleDBContract.Expenses.TABLE_NAME, values, "_id=" + id, null);
+                Toast.makeText(getApplicationContext(), "Row " + id + " has been updated", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 }
