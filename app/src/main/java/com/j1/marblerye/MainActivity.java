@@ -95,23 +95,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private long getTodaysDateInMillis() throws ParseException {
-        long value = 0;
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        calendar.setTime(dateFormat.parse(dateFormat.format(date)));
-        value = calendar.getTimeInMillis();
-
-        return value;
-    }
-
     private double getTodaySpending() {
         // query db for all values entered today
         SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
         long date = 0;
         try {
-            date = getTodaysDateInMillis();
+            date = MarbleUtils.getTodaysDateInMillis();
         } catch (Exception e) {
             Log.d(TAG, "exception caught!" + e.toString());
         }
@@ -173,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
         try {
-            currentDate = getTodaysDateInMillis();
+            currentDate = MarbleUtils.getTodaysDateInMillis();
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }
