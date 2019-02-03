@@ -53,8 +53,11 @@ public class MainActivity extends AppCompatActivity {
         decimalFormat.setRoundingMode(RoundingMode.CEILING);
         spendAverage.setText("$" + decimalFormat.format(getAverageDailySpending()));
 
+        TextView spendAverageCurrent = findViewById(R.id.textView_main_currentMonthAmt);
+        spendAverageCurrent.setText("$" + decimalFormat.format(MarbleCalculator.getCurrentMonthSpending(this)));
+
         TextView spendAverageMonthly = findViewById(R.id.textView_main_avgMonthAmt);
-        spendAverageMonthly.setText("$" + decimalFormat.format(MarbleCalculator.getAverageMonthlySpending(this, new MarbleDBHelper(this).getReadableDatabase())));
+        spendAverageMonthly.setText("$" + decimalFormat.format(MarbleCalculator.getAverageMonthlySpending(this)));
 
         Button buttonReadDB = findViewById(R.id.buttonReadDB);
         buttonReadDB.setOnClickListener(new View.OnClickListener() {
@@ -73,8 +76,10 @@ public class MainActivity extends AppCompatActivity {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         decimalFormat.setRoundingMode(RoundingMode.CEILING);
         spendAverage.setText("$" + decimalFormat.format(getAverageDailySpending()));
+        TextView spendAverageCurrent = findViewById(R.id.textView_main_currentMonthAmt);
+        spendAverageCurrent.setText("$" + decimalFormat.format(MarbleCalculator.getCurrentMonthSpending(this)));
         TextView spendAverageMonthly = findViewById(R.id.textView_main_avgMonthAmt);
-        spendAverageMonthly.setText("$" + decimalFormat.format(MarbleCalculator.getAverageMonthlySpending(this, new MarbleDBHelper(this).getReadableDatabase())));
+        spendAverageMonthly.setText("$" + decimalFormat.format(MarbleCalculator.getAverageMonthlySpending(this)));
         super.onResume();
     }
 
