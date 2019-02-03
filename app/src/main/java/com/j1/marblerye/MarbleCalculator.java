@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class MarbleCalculator {
 
     private static final String TAG = "MarbleCalculator";
@@ -12,12 +15,12 @@ public class MarbleCalculator {
     private static final int DAYS_IN_A_MONTH = 30;
 
     public static double getAverageMonthlySpending(Context context, SQLiteDatabase database) {
+        ArrayList months = new ArrayList();
+        Calendar calendar = Calendar.getInstance();
+        long date;
+        int tempMonth;
         double average;
         double total = 0.00;
-        long days;
-        long currentDate = 0;
-        long firstDate = 0;
-        boolean firstEntry = true;
         // init database
         database = new MarbleDBHelper(context).getReadableDatabase();
         // query for all entries
@@ -26,28 +29,18 @@ public class MarbleCalculator {
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 double value = Double.valueOf(cursor.getString(2));
-                if (firstEntry) {
-                    // if first entry contains first date
-                    firstDate = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
-                    firstEntry = false; // set flag, no longer first entry
+                date = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
+                calendar.setTimeInMillis(date);
+                tempMonth = calendar.get(Calendar.MONTH);
+                if (!months.contains(tempMonth)) {
+                    months.add(tempMonth);
                 }
                 total += value; // add up every value in DB
                 cursor.moveToNext();
             }
         }
         cursor.close();
-        try {
-            currentDate = MarbleUtils.getTodaysDateInMillis();
-        } catch (Exception e) {
-            Log.d(TAG, e.toString());
-        }
-        // days is currentDate - firstDate, divided by MS in a day; add one to include today
-        days = (long) ((currentDate-firstDate)/(MILLISECONDS_IN_A_DAY * DAYS_IN_A_MONTH)) + 1;    // include today
-        Log.d(TAG, "currentDate:  " + currentDate);
-        Log.d(TAG, "firstDate:  " + firstDate);
-        Log.d(TAG, "days:  " + days);
-        Log.d(TAG, "difference: " + (currentDate-firstDate));
-        average = total/days;
+        average = total/months.size();
 
         return average;
     }
