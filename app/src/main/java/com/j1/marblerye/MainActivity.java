@@ -35,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,21 +43,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        TextView spendToday = findViewById(R.id.textViewSpendToday);
-        spendToday.setText("$" + String.format("%.2f", getTodaySpending()));
-
-        TextView spendAverage = findViewById(R.id.textViewSpendAvg);
-        DecimalFormat decimalFormat = new DecimalFormat("#.00");
-        decimalFormat.setRoundingMode(RoundingMode.CEILING);
-        spendAverage.setText("$" + decimalFormat.format(getAverageDailySpending()));
-
-        TextView spendAverageCurrent = findViewById(R.id.textView_main_currentMonthAmt);
-        spendAverageCurrent.setText("$" + decimalFormat.format(MarbleCalculator.getCurrentMonthSpending(this)));
-
-        TextView spendAverageMonthly = findViewById(R.id.textView_main_avgMonthAmt);
-        spendAverageMonthly.setText("$" + decimalFormat.format(MarbleCalculator.getAverageMonthlySpending(this)));
-
         Button buttonReadDB = findViewById(R.id.buttonReadDB);
         buttonReadDB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,19 +51,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        calculateDataAndDisplay();
     }
 
     public void onResume() {
-        TextView spendToday = findViewById(R.id.textViewSpendToday);
-        spendToday.setText("$" + String.format("%.2f", getTodaySpending()));
-        TextView spendAverage = findViewById(R.id.textViewSpendAvg);
-        DecimalFormat decimalFormat = new DecimalFormat("#.00");
-        decimalFormat.setRoundingMode(RoundingMode.CEILING);
-        spendAverage.setText("$" + decimalFormat.format(getAverageDailySpending()));
-        TextView spendAverageCurrent = findViewById(R.id.textView_main_currentMonthAmt);
-        spendAverageCurrent.setText("$" + decimalFormat.format(MarbleCalculator.getCurrentMonthSpending(this)));
-        TextView spendAverageMonthly = findViewById(R.id.textView_main_avgMonthAmt);
-        spendAverageMonthly.setText("$" + decimalFormat.format(MarbleCalculator.getAverageMonthlySpending(this)));
+        calculateDataAndDisplay();
         super.onResume();
     }
 
@@ -105,85 +81,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private double getTodaySpending() {
-        // query db for all values entered today
-        SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
-        long date = 0;
-        try {
-            date = MarbleUtils.getTodaysDateInMillis();
-        } catch (Exception e) {
-            Log.d(TAG, "exception caught!" + e.toString());
-        }
-        String[] projection = {};
-
-        String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " == ?";
-
-        String[] selectionArgs = {date + ""};
-
-        Cursor cursor = database.query(
-                MarbleDBContract.Expenses.TABLE_NAME,     // The table to query
-                null,                               // The columns to return
-                selection,                                // The columns for the WHERE clause
-                selectionArgs,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                      // don't sort
-        );
-        Log.d(TAG, "The total cursor count is " + cursor.getCount());
-
-        double total = 0;
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                double value = Double.valueOf(cursor.getString(2));
-                Log.d(TAG, "value:  " + value);
-                total += value;
-                cursor.moveToNext();
-            }
-        }
-        cursor.close();
-        Log.d(TAG, "total:  " + total);
-
-        return total;
-    }
-
-    private double getAverageDailySpending() {
-        double average;
-        double total = 0.00;
-        int days;
-        long currentDate = 0;
-        long firstDate = 0;
-        boolean firstEntry = true;
-        // init database
-        SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
-        // query for all entries
-        Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
-        // read data retrieved from DB
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                double value = Double.valueOf(cursor.getString(2));
-                if (firstEntry) {
-                    // if first entry contains first date
-                    firstDate = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
-                    firstEntry = false; // set flag, no longer first entry
-                }
-                total += value; // add up every value in DB
-                cursor.moveToNext();
-            }
-        }
-        cursor.close();
-        try {
-            currentDate = MarbleUtils.getTodaysDateInMillis();
-        } catch (Exception e) {
-            Log.d(TAG, e.toString());
-        }
-        // days is currentDate - firstDate, divided by MS in a day; add one to include today
-        days = (int) ((currentDate-firstDate)/86400000) + 1;    // include today
-        Log.d(TAG, "currentDate:  " + currentDate);
-        Log.d(TAG, "firstDate:  " + firstDate);
-        Log.d(TAG, "days:  " + days);
-        Log.d(TAG, "difference: " + (currentDate-firstDate));
-        average = total/days;
-
-        return average;
+    private void calculateDataAndDisplay() {
+        TextView spendToday = findViewById(R.id.textViewSpendToday);
+        spendToday.setText("$" + String.format("%.2f", MarbleCalculator.getTodaySpending(this)));
+        TextView spendAverage = findViewById(R.id.textViewSpendAvg);
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        decimalFormat.setRoundingMode(RoundingMode.CEILING);
+        spendAverage.setText("$" + decimalFormat.format(MarbleCalculator.getAverageDailySpending(this)));
+        TextView spendAverageCurrent = findViewById(R.id.textView_main_currentMonthAmt);
+        spendAverageCurrent.setText("$" + decimalFormat.format(MarbleCalculator.getCurrentMonthSpending(this)));
+        TextView spendAverageMonthly = findViewById(R.id.textView_main_avgMonthAmt);
+        spendAverageMonthly.setText("$" + decimalFormat.format(MarbleCalculator.getAverageMonthlySpending(this)));
     }
 }

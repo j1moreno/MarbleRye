@@ -76,4 +76,86 @@ public class MarbleCalculator {
         return total;
     }
 
+    public static double getTodaySpending(Context context) {
+        // query db for all values entered today
+        SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
+        long date = 0;
+        try {
+            date = MarbleUtils.getTodaysDateInMillis();
+        } catch (Exception e) {
+            Log.d(TAG, "exception caught!" + e.toString());
+        }
+        String[] projection = {};
+
+        String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " == ?";
+
+        String[] selectionArgs = {date + ""};
+
+        Cursor cursor = database.query(
+                MarbleDBContract.Expenses.TABLE_NAME,     // The table to query
+                null,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                      // don't sort
+        );
+        Log.d(TAG, "The total cursor count is " + cursor.getCount());
+
+        double total = 0;
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                double value = Double.valueOf(cursor.getString(2));
+                Log.d(TAG, "value:  " + value);
+                total += value;
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        Log.d(TAG, "total:  " + total);
+
+        return total;
+    }
+
+    public static double getAverageDailySpending(Context context) {
+        double average;
+        double total = 0.00;
+        int days;
+        long currentDate = 0;
+        long firstDate = 0;
+        boolean firstEntry = true;
+        // init database
+        SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
+        // query for all entries
+        Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
+        // read data retrieved from DB
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                double value = Double.valueOf(cursor.getString(2));
+                if (firstEntry) {
+                    // if first entry contains first date
+                    firstDate = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
+                    firstEntry = false; // set flag, no longer first entry
+                }
+                total += value; // add up every value in DB
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        try {
+            currentDate = MarbleUtils.getTodaysDateInMillis();
+        } catch (Exception e) {
+            Log.d(TAG, e.toString());
+        }
+        // days is currentDate - firstDate, divided by MS in a day; add one to include today
+        days = (int) ((currentDate-firstDate)/86400000) + 1;    // include today
+        Log.d(TAG, "currentDate:  " + currentDate);
+        Log.d(TAG, "firstDate:  " + firstDate);
+        Log.d(TAG, "days:  " + days);
+        Log.d(TAG, "difference: " + (currentDate-firstDate));
+        average = total/days;
+
+        return average;
+    }
+
 }
