@@ -11,11 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class ReadDBActivity extends AppCompatActivity {
 
@@ -95,7 +90,7 @@ public class ReadDBActivity extends AppCompatActivity {
         } else {
             // check to see if valid date was entered
             try {
-                date = MarbleUtils.convertDateToLongOrThrow(searchBox.getText().toString());
+                date = MarbleUtils.convertDateToLongOrThrow(this, searchBox.getText().toString());
 
                 // exception wasn't thrown, start building db query
                 String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " == ?";

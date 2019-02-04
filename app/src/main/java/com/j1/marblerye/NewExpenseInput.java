@@ -1,21 +1,18 @@
 package com.j1.marblerye;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class NewExpenseInput extends AppCompatActivity {
 
@@ -55,7 +52,7 @@ public class NewExpenseInput extends AppCompatActivity {
         EditText editTextDate = findViewById(R.id.editText_date);
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format_pattern), Locale.US);
         editTextDate.setText(dateFormat.format(date));
     }
 
@@ -77,7 +74,7 @@ public class NewExpenseInput extends AppCompatActivity {
         values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString());
         // make sure date is properly entered, otherwise don't add entry
         try {
-            long date = MarbleUtils.convertDateToLongOrThrow(dateInput.getText().toString());
+            long date = MarbleUtils.convertDateToLongOrThrow(this, dateInput.getText().toString());
             values.put(MarbleDBContract.Expenses.COLUMN_DATE, date);
         }
         catch (Exception e) {

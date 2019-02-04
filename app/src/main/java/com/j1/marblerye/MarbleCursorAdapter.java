@@ -21,6 +21,6 @@ public class MarbleCursorAdapter extends SimpleCursorAdapter{
         TextView date = view.findViewById(R.id.textViewDate);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.valueOf(date.getText().toString()));
-        date.setText(new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime()));
+        date.setText(new SimpleDateFormat(context.getString(R.string.date_format_pattern)).format(calendar.getTime()));
     }
 }

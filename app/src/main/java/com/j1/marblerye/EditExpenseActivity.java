@@ -2,13 +2,11 @@ package com.j1.marblerye;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditExpenseActivity extends AppCompatActivity {
@@ -35,7 +33,7 @@ public class EditExpenseActivity extends AppCompatActivity {
         description = findViewById(R.id.editText_description);
         description.setText(extras.getString("DESCRIPTION"));
         date = findViewById(R.id.editText_date);
-        date.setText(MarbleUtils.convertLongToDate(extras.getLong("DATE")));
+        date.setText(MarbleUtils.convertLongToDate(this, extras.getLong("DATE")));
         // Edit button to say update instead of add
         Button button = findViewById(R.id.button);
         button.setText("Update Entry");
@@ -52,7 +50,7 @@ public class EditExpenseActivity extends AppCompatActivity {
                 values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, description.getText().toString());
                 // make sure date is properly entered, otherwise don't add entry
                 try {
-                    long longDate = MarbleUtils.convertDateToLongOrThrow(date.getText().toString());
+                    long longDate = MarbleUtils.convertDateToLongOrThrow(getApplicationContext(), date.getText().toString());
                     values.put(MarbleDBContract.Expenses.COLUMN_DATE, longDate);
                 }
                 catch (Exception e) {

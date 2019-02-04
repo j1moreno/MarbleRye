@@ -81,7 +81,7 @@ public class MarbleCalculator {
         SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
         long date = 0;
         try {
-            date = MarbleUtils.getTodaysDateInMillis();
+            date = MarbleUtils.getTodaysDateInMillis(context);
         } catch (Exception e) {
             Log.d(TAG, "exception caught!" + e.toString());
         }
@@ -143,7 +143,7 @@ public class MarbleCalculator {
         }
         cursor.close();
         try {
-            currentDate = MarbleUtils.getTodaysDateInMillis();
+            currentDate = MarbleUtils.getTodaysDateInMillis(context);
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }

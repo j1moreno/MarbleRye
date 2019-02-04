@@ -2,4 +2,5 @@
     <string name="app_name">MarbleRye</string>
     <string name="action_settings">Settings</string>
     <string name="display_amount">$%1$.2f</string>
+    <string name="date_format_pattern">dd MMM yyyy</string>
 </resources>
