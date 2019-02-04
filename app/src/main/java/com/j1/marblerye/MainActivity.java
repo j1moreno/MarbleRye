@@ -1,12 +1,8 @@
 package com.j1.marblerye;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,16 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,14 +70,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void calculateDataAndDisplay() {
         TextView spendToday = findViewById(R.id.textViewSpendToday);
-        spendToday.setText("$" + String.format("%.2f", MarbleCalculator.getTodaySpending(this)));
-        TextView spendAverage = findViewById(R.id.textViewSpendAvg);
-        DecimalFormat decimalFormat = new DecimalFormat("#.00");
-        decimalFormat.setRoundingMode(RoundingMode.CEILING);
-        spendAverage.setText("$" + decimalFormat.format(MarbleCalculator.getAverageDailySpending(this)));
-        TextView spendAverageCurrent = findViewById(R.id.textView_main_currentMonthAmt);
-        spendAverageCurrent.setText("$" + decimalFormat.format(MarbleCalculator.getCurrentMonthSpending(this)));
+        spendToday.setText(getString(R.string.display_amount, MarbleCalculator.getTodaySpending(this)));
+        TextView spendDailyAverage = findViewById(R.id.textViewSpendAvg);
+        spendDailyAverage.setText(getString(R.string.display_amount, MarbleCalculator.getAverageDailySpending(this)));
+        TextView spendCurrentMonth = findViewById(R.id.textView_main_currentMonthAmt);
+        spendCurrentMonth.setText(getString(R.string.display_amount, MarbleCalculator.getCurrentMonthSpending(this)));
         TextView spendAverageMonthly = findViewById(R.id.textView_main_avgMonthAmt);
-        spendAverageMonthly.setText("$" + decimalFormat.format(MarbleCalculator.getAverageMonthlySpending(this)));
+        spendAverageMonthly.setText(getString(R.string.display_amount, MarbleCalculator.getAverageMonthlySpending(this)));
     }
 }
