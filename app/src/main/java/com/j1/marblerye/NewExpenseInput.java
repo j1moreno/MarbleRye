@@ -71,7 +71,7 @@ public class NewExpenseInput extends AppCompatActivity {
             Toast.makeText(this, "Must enter a description!", Toast.LENGTH_LONG).show();
             return;
         }
-        values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString());
+        values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString().trim());
         // make sure date is properly entered, otherwise don't add entry
         try {
             long date = MarbleUtils.convertDateToLongOrThrow(this, dateInput.getText().toString());
