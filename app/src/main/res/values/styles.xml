@@ -14,4 +14,16 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="daily_spend">
+        <item name="android:textSize">24dp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+    <style name="today_">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#99000000</item>
+    </style>
+    <style name="see_daily_h">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#990336FF</item>
+    </style>
 </resources>

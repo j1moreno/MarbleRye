@@ -3,4 +3,16 @@
     <string name="action_settings">Settings</string>
     <string name="display_amount">$%1$.2f</string>
     <string name="date_format_pattern">dd MMM yyyy</string>
+    <string name="daily_spend">
+        Daily Spending
+    </string>
+    <string name="today_">
+        Today:
+    </string>
+    <string name="average_">
+        Average:
+    </string>
+    <string name="some_id">
+$156.78
+</string>
 </resources>
