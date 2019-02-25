@@ -167,7 +167,7 @@
             android:layout_marginTop="112dp"
             android:layout_marginStart="16dp"
             android:background="@android:color/transparent"
-            android:text="SEE WEEKLY HISTORY"
+            android:text="SEE MONTHLY HISTORY"
             android:textAppearance="@style/see_daily_h" />
     </android.support.v7.widget.CardView>
 
