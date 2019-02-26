@@ -37,7 +37,8 @@ public class ViewHistoryActivity extends AppCompatActivity {
                 calendar.setTimeInMillis(date);
                 if (tempDay != calendar.get(Calendar.DAY_OF_MONTH)) {
                     if (currentDate != 0) {
-                        HistoryData data = new HistoryData(MarbleUtils.convertLongToDate(this, currentDate), tempAmount.toString());
+                        HistoryData data = new HistoryData(MarbleUtils.convertLongToDate(this, currentDate),
+                                getString(R.string.display_amount, tempAmount));
                         dataset.add(data);
                     }
                     tempDay = calendar.get(Calendar.DAY_OF_MONTH);
