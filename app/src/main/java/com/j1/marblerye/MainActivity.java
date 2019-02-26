@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         calculateDataAndDisplay();
+        // set listener for history buttons:
+        Button buttonHistoryDaily = findViewById(R.id.see_daily_history);
+        buttonHistoryDaily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ViewHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onResume() {
