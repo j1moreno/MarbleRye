@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ViewHistoryActivity.class);
                 intent.putExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
+                intent.putExtra("DATE_FORMAT", getString(R.string.date_format_pattern));
                 startActivity(intent);
             }
         });
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ViewHistoryActivity.class);
                 intent.putExtra("CALENDAR_CHUNK_SIZE", Calendar.MONTH);
+                intent.putExtra("DATE_FORMAT", getString(R.string.date_format_pattern_month));
                 startActivity(intent);
             }
         });

@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="display_amount">$%1$.2f</string>
     <string name="date_format_pattern">dd MMM yyyy</string>
+    <string name="date_format_pattern_month">MMM yyyy</string>
     <string name="daily_spend">
         Daily Spending
     </string>

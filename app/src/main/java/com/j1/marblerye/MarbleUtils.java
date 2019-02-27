@@ -13,11 +13,11 @@ public class MarbleUtils {
 
     private static final String TAG = "MarbleUtils";
 
-    public static String convertLongToDate(Context context, long input) {
+    public static String convertLongToDate(long input, String dateFormat) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(input);
 
-        return new SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.US).format(calendar.getTime());
+        return new SimpleDateFormat(dateFormat, Locale.US).format(calendar.getTime());
     }
 
     public static long convertDateToLongOrThrow(Context context, String date) throws ParseException {

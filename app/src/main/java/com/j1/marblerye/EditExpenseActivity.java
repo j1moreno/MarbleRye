@@ -33,7 +33,7 @@ public class EditExpenseActivity extends AppCompatActivity {
         description = findViewById(R.id.editText_description);
         description.setText(extras.getString("DESCRIPTION"));
         date = findViewById(R.id.editText_date);
-        date.setText(MarbleUtils.convertLongToDate(this, extras.getLong("DATE")));
+        date.setText(MarbleUtils.convertLongToDate(extras.getLong("DATE"), getString(R.string.date_format_pattern)));
         // Edit button to say update instead of add
         Button button = findViewById(R.id.button);
         button.setText("Update Entry");

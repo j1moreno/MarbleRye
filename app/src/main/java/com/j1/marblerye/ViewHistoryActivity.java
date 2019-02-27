@@ -1,12 +1,12 @@
 package com.j1.marblerye;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.SimpleCursorAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,12 +14,15 @@ import java.util.Calendar;
 public class ViewHistoryActivity extends AppCompatActivity {
 
     private int calendarChunkSize;
+    private String dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_history);
-        calendarChunkSize = getIntent().getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
+        Intent intent = getIntent();
+        calendarChunkSize = intent.getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
+        dateFormat = intent.getStringExtra("DATE_FORMAT");
         // display data from database
         SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
         Cursor cursor = database.rawQuery(
@@ -41,7 +44,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
                 calendar.setTimeInMillis(date);
                 if (tempDay != calendar.get(calendarChunkSize)) {
                     if (currentDate != 0) {
-                        data = new HistoryData(MarbleUtils.convertLongToDate(this, currentDate),
+                        data = new HistoryData(MarbleUtils.convertLongToDate(currentDate, dateFormat),
                                 getString(R.string.display_amount, tempAmount));
                         dataset.add(data);
                     }
@@ -56,7 +59,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
                 cursor.moveToNext();
             }
             // add the last values after loop is done
-            data = new HistoryData(MarbleUtils.convertLongToDate(this, currentDate),
+            data = new HistoryData(MarbleUtils.convertLongToDate(currentDate, dateFormat),
                     getString(R.string.display_amount, tempAmount));
             dataset.add(data);
         }
