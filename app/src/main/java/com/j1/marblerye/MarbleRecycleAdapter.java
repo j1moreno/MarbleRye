@@ -1,6 +1,5 @@
 package com.j1.marblerye;
 
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 
 public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdapter.MyViewHolder> {
     private ArrayList<HistoryData> mDataset;
+    private int rowLayoutId;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -26,8 +26,9 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MarbleRecycleAdapter(ArrayList<HistoryData> myDataset) {
+    public MarbleRecycleAdapter(ArrayList<HistoryData> myDataset, int layout) {
         mDataset = myDataset;
+        rowLayoutId = layout;
     }
 
     // Create new views (invoked by the layout manager)
@@ -36,7 +37,7 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
                                                      int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.history_item_single_line, parent, false);
+                .inflate(rowLayoutId, parent, false);
         return new MyViewHolder(v);
     }
 

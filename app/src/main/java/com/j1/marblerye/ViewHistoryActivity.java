@@ -57,7 +57,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_history);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // specify an adapter (see also next example)
-        MarbleRecycleAdapter mAdapter = new MarbleRecycleAdapter(dataset);
+        MarbleRecycleAdapter mAdapter = new MarbleRecycleAdapter(dataset, R.layout.history_item_single_line);
         recyclerView.setAdapter(mAdapter);
 
     }
