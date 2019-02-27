@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,6 +70,12 @@ public class ViewHistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // specify an adapter (see also next example)
         MarbleRecycleAdapter mAdapter = new MarbleRecycleAdapter(dataset, R.layout.history_item_single_line);
+        mAdapter.setOnItemClickListener(new MarbleRecycleAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(HistoryData data) {
+                Toast.makeText(getApplicationContext(), "Amt: " + data.amount, Toast.LENGTH_SHORT).show();
+            }
+        });
         recyclerView.setAdapter(mAdapter);
 
     }
