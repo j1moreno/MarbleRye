@@ -13,10 +13,13 @@ import java.util.Calendar;
 
 public class ViewHistoryActivity extends AppCompatActivity {
 
+    private int calendarChunkSize;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_history);
+        calendarChunkSize = getIntent().getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
         // display data from database
         SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
         Cursor cursor = database.rawQuery(
@@ -35,13 +38,13 @@ public class ViewHistoryActivity extends AppCompatActivity {
             while (!cursor.isAfterLast()) {
                 date = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
                 calendar.setTimeInMillis(date);
-                if (tempDay != calendar.get(Calendar.DAY_OF_MONTH)) {
+                if (tempDay != calendar.get(calendarChunkSize)) {
                     if (currentDate != 0) {
                         HistoryData data = new HistoryData(MarbleUtils.convertLongToDate(this, currentDate),
                                 getString(R.string.display_amount, tempAmount));
                         dataset.add(data);
                     }
-                    tempDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    tempDay = calendar.get(calendarChunkSize);
                     currentDate = date;
                     tempAmount = 0.00;
                 }

@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ViewHistoryActivity.class);
+                intent.putExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
                 startActivity(intent);
             }
         });
