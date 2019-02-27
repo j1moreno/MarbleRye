@@ -52,6 +52,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button buttonHistoryMonthly = findViewById(R.id.see_monthly_history);
+        buttonHistoryMonthly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ViewHistoryActivity.class);
+                intent.putExtra("CALENDAR_CHUNK_SIZE", Calendar.MONTH);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onResume() {

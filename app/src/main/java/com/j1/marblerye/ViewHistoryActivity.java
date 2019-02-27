@@ -34,13 +34,14 @@ public class ViewHistoryActivity extends AppCompatActivity {
         long date;
         long currentDate = 0;
         Double tempAmount = 0.00;
+        HistoryData data;
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 date = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
                 calendar.setTimeInMillis(date);
                 if (tempDay != calendar.get(calendarChunkSize)) {
                     if (currentDate != 0) {
-                        HistoryData data = new HistoryData(MarbleUtils.convertLongToDate(this, currentDate),
+                        data = new HistoryData(MarbleUtils.convertLongToDate(this, currentDate),
                                 getString(R.string.display_amount, tempAmount));
                         dataset.add(data);
                     }
@@ -54,6 +55,10 @@ public class ViewHistoryActivity extends AppCompatActivity {
 
                 cursor.moveToNext();
             }
+            // add the last values after loop is done
+            data = new HistoryData(MarbleUtils.convertLongToDate(this, currentDate),
+                    getString(R.string.display_amount, tempAmount));
+            dataset.add(data);
         }
         cursor.close();
 
