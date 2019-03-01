@@ -13,6 +13,7 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
     private ArrayList<HistoryData> mDataset;
     private int rowLayoutId;
     private OnItemClickListener mListener;
+    private RecycleRowData mRowData;
 
     public interface OnItemClickListener {
         void onItemClick(HistoryData data);
@@ -22,17 +23,18 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView description, amount;
-        public MyViewHolder(View v) {
+
+        // RecycleRowData object contains the data to be defined
+        private RecycleRowData rowData;
+
+        public MyViewHolder(View v, RecycleRowData rd) {
             super(v);
-            description = v.findViewById(R.id.history_description);
-            amount = v.findViewById(R.id.history_amount);
+            rowData = rd;
+            rowData.bindViews(v);
         }
 
         public void bind(final HistoryData item, final OnItemClickListener listener) {
-            description.setText(item.date);
-            amount.setText(item.amount);
+            rowData.bindData(item);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);
@@ -41,10 +43,11 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public MarbleRecycleAdapter(ArrayList<HistoryData> myDataset, int layout) {
+
+    public MarbleRecycleAdapter(ArrayList<HistoryData> myDataset, int layout, RecycleRowData rowData) {
         mDataset = myDataset;
         rowLayoutId = layout;
+        mRowData = rowData;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -58,7 +61,7 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(rowLayoutId, parent, false);
-        return new MyViewHolder(v);
+        return new MyViewHolder(v, mRowData);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

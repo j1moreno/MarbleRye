@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -69,11 +71,24 @@ public class ViewHistoryActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_history);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // specify an adapter (see also next example)
-        MarbleRecycleAdapter mAdapter = new MarbleRecycleAdapter(dataset, R.layout.history_item_single_line);
+        RecycleRowData testData = new RecycleRowData() {
+            @Override
+            public void bindViews(View v) {
+                description = v.findViewById(R.id.history_description);
+                amount = v.findViewById(R.id.history_amount);
+            }
+
+            @Override
+            public void bindData(HistoryData historyData) {
+                description.setText(historyData.date);
+                amount.setText(historyData.amount);
+            }
+        };
+        MarbleRecycleAdapter mAdapter = new MarbleRecycleAdapter(dataset, R.layout.history_item_single_line, testData);
         mAdapter.setOnItemClickListener(new MarbleRecycleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(HistoryData data) {
-                Toast.makeText(getApplicationContext(), "Amt: " + data.amount, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Amt: ", Toast.LENGTH_SHORT).show();
             }
         });
         recyclerView.setAdapter(mAdapter);
