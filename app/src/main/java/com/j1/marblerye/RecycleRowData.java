@@ -3,8 +3,6 @@ package com.j1.marblerye;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 public abstract class RecycleRowData {
     protected TextView description;
     protected TextView date;
