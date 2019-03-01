@@ -47,8 +47,9 @@ public class ViewHistoryActivity extends AppCompatActivity {
                 calendar.setTimeInMillis(date);
                 if (tempDay != calendar.get(calendarChunkSize)) {
                     if (currentDate != 0) {
-                        data = new HistoryData(MarbleUtils.convertLongToDate(currentDate, dateFormat),
-                                getString(R.string.display_amount, tempAmount));
+                        data = new HistoryData();
+                        data.date = MarbleUtils.convertLongToDate(currentDate, dateFormat);
+                        data.amount = getString(R.string.display_amount, tempAmount);
                         dataset.add(data);
                     }
                     tempDay = calendar.get(calendarChunkSize);
@@ -62,8 +63,9 @@ public class ViewHistoryActivity extends AppCompatActivity {
                 cursor.moveToNext();
             }
             // add the last values after loop is done
-            data = new HistoryData(MarbleUtils.convertLongToDate(currentDate, dateFormat),
-                    getString(R.string.display_amount, tempAmount));
+            data = new HistoryData();
+            data.date = MarbleUtils.convertLongToDate(currentDate, dateFormat);
+            data.amount = getString(R.string.display_amount, tempAmount);
             dataset.add(data);
         }
         cursor.close();
