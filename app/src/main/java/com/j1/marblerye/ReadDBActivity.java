@@ -90,7 +90,7 @@ public class ReadDBActivity extends AppCompatActivity {
         } else {
             // check to see if valid date was entered
             try {
-                date = MarbleUtils.convertDateToLongOrThrow(this, searchBox.getText().toString());
+                date = MarbleUtils.convertDateToLong(this, searchBox.getText().toString());
 
                 // exception wasn't thrown, start building db query
                 String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " == ?";

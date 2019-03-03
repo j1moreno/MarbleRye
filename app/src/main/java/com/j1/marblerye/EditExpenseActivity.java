@@ -50,7 +50,7 @@ public class EditExpenseActivity extends AppCompatActivity {
                 values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, description.getText().toString().trim());
                 // make sure date is properly entered, otherwise don't add entry
                 try {
-                    long longDate = MarbleUtils.convertDateToLongOrThrow(getApplicationContext(), date.getText().toString());
+                    long longDate = MarbleUtils.convertDateToLong(getApplicationContext(), date.getText().toString());
                     values.put(MarbleDBContract.Expenses.COLUMN_DATE, longDate);
                 }
                 catch (Exception e) {

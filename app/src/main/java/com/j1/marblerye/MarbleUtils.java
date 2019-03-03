@@ -20,16 +20,20 @@ public class MarbleUtils {
         return new SimpleDateFormat(dateFormat, Locale.US).format(calendar.getTime());
     }
 
-    public static long convertDateToLongOrThrow(Context context, String date) throws ParseException {
+    public static long convertDateToLong(Context context, String date) {
+        return convertDateToLong(context, date, context.getString(R.string.date_format_pattern));
+    }
+
+    public static long convertDateToLong(Context context, String date, String format) {
         try {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime((new SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.US)).parse(date));
+            calendar.setTime((new SimpleDateFormat(format, Locale.US)).parse(date));
 
             return calendar.getTimeInMillis();
         }
         catch (Exception e) {
             Log.e(TAG, "Unable to parse date, it's probably in the incorrect format", e);
-            throw e;
+            return 0;
         }
     }
 

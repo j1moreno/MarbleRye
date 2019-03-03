@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,24 +75,19 @@ public class ViewHistoryActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_history);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // specify an adapter (see also next example)
-        RecycleRowData testData = new RecycleRowData() {
-            @Override
-            public void bindViews(View v) {
-                description = v.findViewById(R.id.history_description);
-                amount = v.findViewById(R.id.history_amount);
-            }
-
-            @Override
-            public void bindData(HistoryData historyData) {
-                description.setText(historyData.date);
-                amount.setText(historyData.amount);
-            }
-        };
-        MarbleRecycleAdapter mAdapter = new MarbleRecycleAdapter(dataset, R.layout.history_item_single_line, testData);
+        MarbleRecycleAdapter mAdapter = new MarbleRecycleAdapter(dataset, R.layout.history_item_single_line);
         mAdapter.setOnItemClickListener(new MarbleRecycleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(HistoryData data) {
                 Intent intent = new Intent(ViewHistoryActivity.this, DetailedExpenseHistoryActivity.class);
+                String date = data.date;
+                if (calendarChunkSize == Calendar.MONTH) {
+                    date = "01 " + date;
+                }
+                Toast.makeText(getApplicationContext(), date, Toast.LENGTH_SHORT).show();
+                intent.putExtra("DATE_TO_SEARCH", date);
+                intent.putExtra("DATE_FORMAT", dateFormat);
+                intent.putExtra("CALENDAR_CHUNK_SIZE", calendarChunkSize);
                 startActivity(intent);
 
             }
