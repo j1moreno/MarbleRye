@@ -28,6 +28,10 @@ public class ViewHistoryActivity extends AppCompatActivity {
         Intent intent = getIntent();
         calendarChunkSize = intent.getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
         dateFormat = intent.getStringExtra("DATE_FORMAT");
+        // set title based on what action started the activity
+        String title = (calendarChunkSize == Calendar.DAY_OF_MONTH) ? "Daily" : "Monthly";
+        title += " History";
+        setTitle(title);
         // display data from database
         SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
         Cursor cursor = database.rawQuery(
@@ -81,9 +85,6 @@ public class ViewHistoryActivity extends AppCompatActivity {
             public void onItemClick(HistoryData data) {
                 Intent intent = new Intent(ViewHistoryActivity.this, DetailedExpenseHistoryActivity.class);
                 String date = data.date;
-                if (calendarChunkSize == Calendar.MONTH) {
-                    date = "01 " + date;
-                }
                 Toast.makeText(getApplicationContext(), date, Toast.LENGTH_SHORT).show();
                 intent.putExtra("DATE_TO_SEARCH", date);
                 intent.putExtra("DATE_FORMAT", dateFormat);

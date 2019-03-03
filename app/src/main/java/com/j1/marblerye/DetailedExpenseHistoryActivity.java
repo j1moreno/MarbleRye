@@ -19,20 +19,23 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_history);
-        long dateToSearch = MarbleUtils.convertDateToLong(
-                this,
-                getIntent().getStringExtra("DATE_TO_SEARCH"));
         int calendarChunkSize = getIntent().getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
+        String dateToSearch = getIntent().getStringExtra("DATE_TO_SEARCH");
+        setTitle(dateToSearch);
+        if (calendarChunkSize == Calendar.MONTH) {
+            dateToSearch = "01 " + dateToSearch;
+        }
+        long dateLower = MarbleUtils.convertDateToLong(this, dateToSearch);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateToSearch);
+        calendar.setTimeInMillis(dateLower);
         calendar.add(calendarChunkSize, 1);
         long dateUpper = calendar.getTimeInMillis();
-        Log.d("Detail", ""+dateToSearch);
+        Log.d("Detail", ""+dateLower);
         // display data from database
         SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
         Cursor cursor = database.rawQuery(
                 "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
-                        " where " + MarbleDBContract.Expenses.COLUMN_DATE + " >= " + dateToSearch +
+                        " where " + MarbleDBContract.Expenses.COLUMN_DATE + " >= " + dateLower +
                         " and " + MarbleDBContract.Expenses.COLUMN_DATE + " < " + dateUpper +
                         " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " desc",
                 null);
