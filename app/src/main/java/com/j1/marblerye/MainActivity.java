@@ -33,14 +33,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button buttonReadDB = findViewById(R.id.buttonReadDB);
-        buttonReadDB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ReadDBActivity.class);
-                startActivity(intent);
-            }
-        });
         calculateDataAndDisplay();
         // set listener for history buttons:
         Button buttonHistoryDaily = findViewById(R.id.see_daily_history);
@@ -87,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.see_all_history) {
+            Intent intent = new Intent(MainActivity.this, ReadDBActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

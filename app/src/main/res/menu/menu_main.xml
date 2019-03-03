@@ -6,4 +6,7 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item android:id="@+id/see_all_history"
+        android:title="See All History"
+        android:orderInCategory="100" />
 </menu>
