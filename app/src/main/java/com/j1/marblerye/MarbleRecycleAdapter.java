@@ -130,5 +130,9 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
     public int getItemCount() {
         return mDataset.size();
     }
+
+    public void setData(ArrayList<HistoryData> newDataset) {
+        mDataset = newDataset;
+    }
 }
 

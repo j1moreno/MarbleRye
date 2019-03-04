@@ -18,6 +18,8 @@ import java.util.Calendar;
 public class DetailedExpenseHistoryActivity extends AppCompatActivity {
 
     private MarbleRecycleAdapter mAdapter;
+    private long dateLower, dateUpper;
+    private SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,36 +31,16 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
         if (calendarChunkSize == Calendar.MONTH) {
             dateToSearch = "01 " + dateToSearch;
         }
-        long dateLower = MarbleUtils.convertDateToLong(this, dateToSearch);
+        dateLower = MarbleUtils.convertDateToLong(this, dateToSearch);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(dateLower);
         calendar.add(calendarChunkSize, 1);
-        long dateUpper = calendar.getTimeInMillis();
-        Log.d("Detail", ""+dateLower);
+        dateUpper = calendar.getTimeInMillis();
         // display data from database
-        SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
-        Cursor cursor = database.rawQuery(
-                "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
-                        " where " + MarbleDBContract.Expenses.COLUMN_DATE + " >= " + dateLower +
-                        " and " + MarbleDBContract.Expenses.COLUMN_DATE + " < " + dateUpper +
-                        " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " desc",
-                null);
+        database = new MarbleDBHelper(this).getReadableDatabase();
 
         // create array list with desired data:
-        ArrayList<HistoryData> dataset = new ArrayList<HistoryData>();
-        HistoryData data;
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                data = new HistoryData();
-                data.rowId = cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses._ID));
-                data.description = cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DESCRIPTION));
-                data.date = MarbleUtils.convertLongToDate(cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE)), "dd MMM yyyy");
-                data.amount = getString(R.string.display_amount, Double.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_AMOUNT))));
-                dataset.add(data);
-                cursor.moveToNext();
-            }
-        }
-        cursor.close();
+        ArrayList<HistoryData> dataset = getDataset();
 
         // create recycle view and adapter for data
         RecyclerView recyclerView = findViewById(R.id.recycler_view_history);
@@ -86,7 +68,36 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
     }
 
     public void onResume() {
-        // @todo: update items in list
+        ArrayList<HistoryData> dataset = getDataset();
+        mAdapter.setData(dataset);
+        mAdapter.notifyDataSetChanged();
         super.onResume();
+    }
+
+    private ArrayList<HistoryData> getDataset() {
+        Cursor cursor = database.rawQuery(
+                "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
+                        " where " + MarbleDBContract.Expenses.COLUMN_DATE + " >= " + dateLower +
+                        " and " + MarbleDBContract.Expenses.COLUMN_DATE + " < " + dateUpper +
+                        " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " desc",
+                null);
+
+        // create array list with desired data:
+        ArrayList<HistoryData> dataset = new ArrayList<HistoryData>();
+        HistoryData data;
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                data = new HistoryData();
+                data.rowId = cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses._ID));
+                data.description = cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DESCRIPTION));
+                data.date = MarbleUtils.convertLongToDate(cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE)), "dd MMM yyyy");
+                data.amount = getString(R.string.display_amount, Double.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_AMOUNT))));
+                dataset.add(data);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+
+        return dataset;
     }
 }
