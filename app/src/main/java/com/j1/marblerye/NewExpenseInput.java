@@ -1,5 +1,6 @@
 package com.j1.marblerye;
 
+import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -49,11 +51,22 @@ public class NewExpenseInput extends AppCompatActivity {
         });
 
         // set default date
-        EditText editTextDate = findViewById(R.id.editText_date);
+        final TextView textViewDate = findViewById(R.id.textView_date);
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format_pattern), Locale.US);
-        editTextDate.setText(dateFormat.format(date));
+        textViewDate.setText(dateFormat.format(date));
+        textViewDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("CURRENT_DATE", MarbleUtils.convertDateToLong(getApplicationContext(), textViewDate.getText().toString()));
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.setArguments(bundle);
+                newFragment.show(getFragmentManager(), "datePicker");
+
+            }
+        });
     }
 
     private void saveToDB() {
@@ -62,7 +75,7 @@ public class NewExpenseInput extends AppCompatActivity {
         // get data from inputs
         EditText amountInput = findViewById(R.id.editText_amount);
         EditText descriptionInput = findViewById(R.id.editText_description);
-        EditText dateInput = findViewById(R.id.editText_date);
+        TextView dateInput = findViewById(R.id.textView_date);
 
         ContentValues values = new ContentValues();
         values.put(MarbleDBContract.Expenses.COLUMN_AMOUNT, amountInput.getText().toString());

@@ -1,5 +1,6 @@
 package com.j1.marblerye;
 
+import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -7,13 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditExpenseActivity extends AppCompatActivity {
 
     private EditText amount;
     private EditText description;
-    private EditText date;
+    private TextView date;
     private String id;
 
     private double changeAmount = 1.00;
@@ -32,8 +34,19 @@ public class EditExpenseActivity extends AppCompatActivity {
         amount.setText(extras.getString("AMOUNT"));
         description = findViewById(R.id.editText_description);
         description.setText(extras.getString("DESCRIPTION"));
-        date = findViewById(R.id.editText_date);
+        date = findViewById(R.id.textView_date);
         date.setText(MarbleUtils.convertLongToDate(extras.getLong("DATE"), getString(R.string.date_format_pattern)));
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("CURRENT_DATE", MarbleUtils.convertDateToLong(getApplicationContext(), date.getText().toString()));
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.setArguments(bundle);
+                newFragment.show(getFragmentManager(), "datePicker");
+
+            }
+        });
         // Edit button to say update instead of add
         Button button = findViewById(R.id.button);
         button.setText("Update Entry");
