@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,7 +52,8 @@ public class NewExpenseInput extends AppCompatActivity {
         });
 
         // set default date
-        final TextView textViewDate = findViewById(R.id.textView_date);
+        final EditText textViewDate = findViewById(R.id.editExpense_editText_date);
+        textViewDate.setInputType(InputType.TYPE_NULL);
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format_pattern), Locale.US);
@@ -75,7 +77,7 @@ public class NewExpenseInput extends AppCompatActivity {
         // get data from inputs
         EditText amountInput = findViewById(R.id.editText_amount);
         EditText descriptionInput = findViewById(R.id.editText_description);
-        TextView dateInput = findViewById(R.id.textView_date);
+        TextView dateInput = findViewById(R.id.editExpense_editText_date);
 
         ContentValues values = new ContentValues();
         values.put(MarbleDBContract.Expenses.COLUMN_AMOUNT, amountInput.getText().toString());

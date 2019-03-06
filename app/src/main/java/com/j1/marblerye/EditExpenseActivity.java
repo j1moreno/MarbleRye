@@ -1,10 +1,10 @@
 package com.j1.marblerye;
 
-import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,7 +20,7 @@ public class EditExpenseActivity extends AppCompatActivity {
 
     private EditText amount;
     private EditText description;
-    private TextView date;
+    private EditText date;
     private String id;
 
     private double changeAmount = 1.00;
@@ -39,7 +39,8 @@ public class EditExpenseActivity extends AppCompatActivity {
         amount.setText(extras.getString("AMOUNT"));
         description = findViewById(R.id.editText_description);
         description.setText(extras.getString("DESCRIPTION"));
-        date = findViewById(R.id.textView_date);
+        date = findViewById(R.id.editExpense_editText_date);
+        date.setInputType(InputType.TYPE_NULL);
         date.setText(MarbleUtils.convertLongToDate(extras.getLong("DATE"), getString(R.string.date_format_pattern)));
         date.setOnClickListener(new View.OnClickListener() {
             @Override
