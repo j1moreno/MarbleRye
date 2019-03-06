@@ -14,6 +14,12 @@ import java.util.Locale;
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
+    private MarbleDateSetListener dateSetListener;
+
+    public interface MarbleDateSetListener {
+        void onSet(DatePicker view, int year, int month, int day);
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current date as the default date in the picker
@@ -29,12 +35,10 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        TextView date = getActivity().findViewById(R.id.textView_date);
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        String formattedDate = new SimpleDateFormat(getString(R.string.date_format_pattern), Locale.US).format(calendar.getTime());
-        date.setText(formattedDate);
+        dateSetListener.onSet(view, year, month, day);
+    }
+
+    public void setDateSetListener(MarbleDateSetListener listener) {
+        dateSetListener = listener;
     }
 }

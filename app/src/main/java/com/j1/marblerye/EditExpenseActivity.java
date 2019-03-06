@@ -7,9 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class EditExpenseActivity extends AppCompatActivity {
 
@@ -41,7 +46,18 @@ public class EditExpenseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putLong("CURRENT_DATE", MarbleUtils.convertDateToLong(getApplicationContext(), date.getText().toString()));
-                DialogFragment newFragment = new DatePickerFragment();
+                DatePickerFragment newFragment = new DatePickerFragment();
+                newFragment.setDateSetListener(new DatePickerFragment.MarbleDateSetListener() {
+                    @Override
+                    public void onSet(DatePicker view, int year, int month, int day) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, day);
+                        String formattedDate = new SimpleDateFormat(getString(R.string.date_format_pattern), Locale.US).format(calendar.getTime());
+                        date.setText(formattedDate);
+                    }
+                });
                 newFragment.setArguments(bundle);
                 newFragment.show(getFragmentManager(), "datePicker");
 
