@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -49,6 +50,44 @@ public class NewExpenseInput extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 decreaseAmount();
+            }
+        });
+
+        final EditText description = findViewById(R.id.editText_description);
+
+        // set frequently used buttons
+        String [] mostUsedDescriptions = MarbleCalculator.getMostUsedDescriptions(getApplicationContext(), 3);
+        // make sure we have at least 3 entries, otherwise write default values:
+        if (mostUsedDescriptions.length < 3) {
+            String [] defaultDesciptions = {"Lunch", "Gas", "Drinks"};
+            mostUsedDescriptions = defaultDesciptions;
+        }
+        Button mostUsed1 = findViewById(R.id.editExpense_button_mostUsed1);
+        Button mostUsed2 = findViewById(R.id.editExpense_button_mostUsed2);
+        Button mostUsed3 = findViewById(R.id.editExpense_button_mostUsed3);
+        mostUsed1.setText(mostUsedDescriptions[0]);
+        mostUsed2.setText(mostUsedDescriptions[1]);
+        mostUsed3.setText(mostUsedDescriptions[2]);
+        // set listeners for buttons
+        mostUsed1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button button = (Button) view;
+                description.setText(button.getText().toString());
+            }
+        });
+        mostUsed2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button button = (Button) view;
+                description.setText(button.getText().toString());
+            }
+        });
+        mostUsed3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button button = (Button) view;
+                description.setText(button.getText().toString());
             }
         });
 

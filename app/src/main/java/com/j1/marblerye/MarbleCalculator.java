@@ -7,6 +7,13 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MarbleCalculator {
 
@@ -156,6 +163,74 @@ public class MarbleCalculator {
         average = total/days;
 
         return average;
+    }
+
+    public static String [] getMostUsedDescriptions(Context context) {
+        return getMostUsedDescriptions(context, 1);
+    }
+
+    public static String [] getMostUsedDescriptions(Context context, int nthMax) {
+        SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
+        HashMap descriptionFrequencies = new HashMap();
+        Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DESCRIPTION));
+                if (descriptionFrequencies.containsKey(description)) {
+                    descriptionFrequencies.put(description, (int)descriptionFrequencies.get(description)+1);
+                } else {
+                    descriptionFrequencies.put(description, 1);
+                }
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+
+        String[] maxValues = new String[nthMax];
+        LinkedHashMap sortedValues = sortHashMapByValues(descriptionFrequencies);
+
+        // Get a set of the entries
+        Set set = sortedValues.entrySet();
+        // Get an iterator
+        Iterator iterator = set.iterator();
+        // Display elements
+        int i = 0;
+        while (iterator.hasNext() && (i < nthMax)) {
+            Map.Entry entry = (Map.Entry)iterator.next();
+            maxValues[i] = (String) entry.getKey();
+            i++;
+        }
+
+        return maxValues;
+    }
+
+    public static LinkedHashMap<String, Integer> sortHashMapByValues(
+            HashMap<String, Integer> passedMap) {
+        List<String> mapKeys = new ArrayList<>(passedMap.keySet());
+        List<Integer> mapValues = new ArrayList<>(passedMap.values());
+        Collections.sort(mapValues, Collections.<Integer>reverseOrder());
+
+        LinkedHashMap<String, Integer> sortedMap =
+                new LinkedHashMap<>();
+
+        Iterator<Integer> valueIt = mapValues.iterator();
+        while (valueIt.hasNext()) {
+            int val = valueIt.next();
+            Iterator<String> keyIt = mapKeys.iterator();
+
+            while (keyIt.hasNext()) {
+                String key = keyIt.next();
+                int comp1 = passedMap.get(key);
+                int comp2 = val;
+
+                if (comp1 == comp2) {
+                    keyIt.remove();
+                    sortedMap.put(key, val);
+                    break;
+                }
+            }
+        }
+        return sortedMap;
     }
 
 }
