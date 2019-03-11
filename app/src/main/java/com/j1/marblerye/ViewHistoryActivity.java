@@ -33,7 +33,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph_test);
+        setContentView(R.layout.activity_view_history);
         Intent intent = getIntent();
         calendarChunkSize = intent.getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
         dateFormat = intent.getStringExtra("DATE_FORMAT");
