@@ -3,19 +3,25 @@ package com.j1.marblerye;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.icu.text.DecimalFormat;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class ViewHistoryActivity extends AppCompatActivity {
 
@@ -27,7 +33,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_history);
+        setContentView(R.layout.activity_graph_test);
         Intent intent = getIntent();
         calendarChunkSize = intent.getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
         dateFormat = intent.getStringExtra("DATE_FORMAT");
@@ -39,7 +45,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
         // create array list with desired data:
         ArrayList<HistoryData> dataset = getDataset();
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_history);
+        RecyclerView recyclerView = findViewById(R.id.viewHistory_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // specify an adapter (see also next example)
         mAdapter = new MarbleRecycleAdapter(dataset, R.layout.history_item_single_line);
@@ -58,6 +64,46 @@ public class ViewHistoryActivity extends AppCompatActivity {
         });
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
+
+        // in this example, a LineChart is initialized from xml
+        LineChart chart = findViewById(R.id.chart);
+
+        List<Entry> entries = new ArrayList<Entry>();
+
+        float xCount = 0;
+        for (HistoryData data : dataset) {
+            entries.add(new Entry(xCount, Float.valueOf(data.amount.substring(1))));
+            xCount++;
+            Log.d("graphTest", String.valueOf(data.longDate));
+        }
+
+        LineDataSet lineDataSet = new LineDataSet(entries, ""); // add entries to dataset
+        lineDataSet.setColor(Color.MAGENTA);
+        lineDataSet.setCircleColor(Color.MAGENTA);
+        lineDataSet.setCircleRadius(1f);
+        lineDataSet.setValueTextColor(Color.TRANSPARENT);
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawLabels(false);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setAxisLineWidth(1f);
+        xAxis.setAxisLineColor(Color.BLACK);
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setAxisLineWidth(1f);
+        leftAxis.setAxisMaximum(3500f);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setAxisLineColor(Color.BLACK);
+        chart.getAxisRight().setEnabled(false);
+        chart.getLegend().setEnabled(false);
+        chart.getDescription().setText("");
+
+        LineData lineData = new LineData(lineDataSet);
+        chart.setData(lineData);
+        chart.setDrawGridBackground(false);
+        chart.invalidate(); // refresh
+
+        chart.getParent().requestChildFocus(chart, chart);
 
     }
 
@@ -89,6 +135,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
                     if (currentDate != 0) {
                         data = new HistoryData();
                         data.date = MarbleUtils.convertLongToDate(currentDate, dateFormat);
+                        data.longDate = currentDate;
                         data.amount = getString(R.string.display_amount, tempAmount);
                         dataset.add(data);
                     }
@@ -105,6 +152,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
             // add the last values after loop is done
             data = new HistoryData();
             data.date = MarbleUtils.convertLongToDate(currentDate, dateFormat);
+            data.longDate = currentDate;
             data.amount = getString(R.string.display_amount, tempAmount);
             dataset.add(data);
         }
