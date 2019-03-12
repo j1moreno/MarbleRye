@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class ViewHistoryActivity extends AppCompatActivity {
@@ -69,9 +70,10 @@ public class ViewHistoryActivity extends AppCompatActivity {
         LineChart chart = findViewById(R.id.chart);
 
         List<Entry> entries = new ArrayList<Entry>();
-
+        ArrayList<HistoryData> reversedDataSet = dataset;
+        Collections.reverse(reversedDataSet);
         float xCount = 0;
-        for (HistoryData data : dataset) {
+        for (HistoryData data : reversedDataSet) {
             entries.add(new Entry(xCount, Float.valueOf(data.amount.substring(1))));
             xCount++;
             Log.d("graphTest", String.valueOf(data.longDate));
