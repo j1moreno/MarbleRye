@@ -24,7 +24,7 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_history);
+        setContentView(R.layout.activity_detailed_history);
         int calendarChunkSize = getIntent().getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
         String dateToSearch = getIntent().getStringExtra("DATE_TO_SEARCH");
         setTitle(dateToSearch);
@@ -43,7 +43,7 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
         ArrayList<HistoryData> dataset = getDataset();
 
         // create recycle view and adapter for data
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_history);
+        RecyclerView recyclerView = findViewById(R.id.detailedHistory_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // specify an adapter (see also next example)
         mAdapter = new MarbleRecycleAdapter(dataset, R.layout.database_read_item);
