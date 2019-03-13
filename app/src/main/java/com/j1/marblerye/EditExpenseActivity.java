@@ -102,7 +102,6 @@ public class EditExpenseActivity extends AppCompatActivity {
         });
         // Edit button to say update instead of add
         Button button = findViewById(R.id.button);
-        button.setText("Update Entry");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
