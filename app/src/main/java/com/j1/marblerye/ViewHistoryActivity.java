@@ -104,8 +104,6 @@ public class ViewHistoryActivity extends AppCompatActivity {
         xAxis.setAxisLineColor(Color.BLACK);
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setAxisLineWidth(1f);
-        leftAxis.setAxisMaximum(3500f);
-        leftAxis.setAxisMinimum(0f);
         leftAxis.setAxisLineColor(Color.BLACK);
         chart.getAxisRight().setEnabled(false);
         chart.getLegend().setEnabled(false);
