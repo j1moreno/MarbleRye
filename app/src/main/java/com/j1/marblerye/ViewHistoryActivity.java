@@ -10,6 +10,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -42,6 +43,10 @@ public class ViewHistoryActivity extends AppCompatActivity {
         String title = (calendarChunkSize == Calendar.DAY_OF_MONTH) ? "Daily" : "Monthly";
         title += " History";
         setTitle(title);
+        TextView textView_spendingPerChunk = findViewById(R.id.viewHistory_textView_spendingPerChunk);
+        String spendingPerChunk = "Spending Per ";
+        spendingPerChunk += (calendarChunkSize == Calendar.DAY_OF_MONTH) ? "Day" : "Month";
+        textView_spendingPerChunk.setText(spendingPerChunk);
         database = new MarbleDBHelper(this).getReadableDatabase();
         // create array list with desired data:
         ArrayList<HistoryData> dataset = getDataset();
