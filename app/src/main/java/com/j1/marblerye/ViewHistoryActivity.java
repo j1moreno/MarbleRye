@@ -73,10 +73,17 @@ public class ViewHistoryActivity extends AppCompatActivity {
         ArrayList<HistoryData> reversedDataSet = dataset;
         Collections.reverse(reversedDataSet);
         float xCount = 0;
+        float xIncrement = 0;
         long previousDate = 0;
         for (HistoryData data : reversedDataSet) {
             if (previousDate > 0){
-                xCount += getXAxisIncrement(previousDate, data.longDate);
+                xIncrement = getXAxisIncrement(previousDate, data.longDate);
+                if (xIncrement > 1) {
+                    for (int i = 1; i < xIncrement; i++) {
+                        entries.add(new Entry(xCount+i, 0));
+                    }
+                }
+                xCount += xIncrement;
             }
             previousDate = data.longDate;
             entries.add(new Entry(xCount, Float.valueOf(data.amount.substring(1))));
@@ -87,7 +94,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
         lineDataSet.setColor(Color.MAGENTA);
         lineDataSet.setCircleColor(Color.MAGENTA);
         lineDataSet.setCircleRadius(1f);
-        lineDataSet.setValueTextColor(Color.TRANSPARENT);
+        lineDataSet.setValueTextColor(Color.BLUE);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
