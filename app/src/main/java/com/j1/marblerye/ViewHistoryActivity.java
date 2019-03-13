@@ -31,6 +31,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
     private String dateFormat;
     private SQLiteDatabase database;
     private MarbleRecycleAdapter mAdapter;
+    private LineChart chart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,34 +73,10 @@ public class ViewHistoryActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
         // in this example, a LineChart is initialized from xml
-        LineChart chart = findViewById(R.id.chart);
+        chart = findViewById(R.id.chart);
 
-        List<Entry> entries = new ArrayList<Entry>();
-        ArrayList<HistoryData> reversedDataSet = dataset;
+        ArrayList<HistoryData> reversedDataSet = new ArrayList<>(dataset);
         Collections.reverse(reversedDataSet);
-        float xCount = 0;
-        float xIncrement = 0;
-        long previousDate = 0;
-        for (HistoryData data : reversedDataSet) {
-            if (previousDate > 0){
-                xIncrement = getXAxisIncrement(previousDate, data.longDate);
-                if (xIncrement > 1) {
-                    for (int i = 1; i < xIncrement; i++) {
-                        entries.add(new Entry(xCount+i, 0));
-                    }
-                }
-                xCount += xIncrement;
-            }
-            previousDate = data.longDate;
-            entries.add(new Entry(xCount, Float.valueOf(data.amount.substring(1))));
-            Log.d("graphTest - xCount", String.valueOf(xCount));
-        }
-
-        LineDataSet lineDataSet = new LineDataSet(entries, ""); // add entries to dataset
-        lineDataSet.setColor(Color.MAGENTA);
-        lineDataSet.setCircleColor(Color.MAGENTA);
-        lineDataSet.setCircleRadius(1f);
-        lineDataSet.setValueTextColor(Color.BLUE);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -114,8 +91,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
         chart.getLegend().setEnabled(false);
         chart.getDescription().setText("");
 
-        LineData lineData = new LineData(lineDataSet);
-        chart.setData(lineData);
+        chart.setData(getGraphLineData(reversedDataSet));
         chart.setDrawGridBackground(false);
         chart.invalidate(); // refresh
 
@@ -127,6 +103,10 @@ public class ViewHistoryActivity extends AppCompatActivity {
         ArrayList<HistoryData> dataset = getDataset();
         mAdapter.setData(dataset);
         mAdapter.notifyDataSetChanged();
+        ArrayList<HistoryData> reversedDataSet = new ArrayList<>(dataset);
+        Collections.reverse(reversedDataSet);
+        chart.setData(getGraphLineData(reversedDataSet));
+        chart.invalidate();
         super.onResume();
     }
 
@@ -197,5 +177,34 @@ public class ViewHistoryActivity extends AppCompatActivity {
         }
 
         return chunkCounter;
+    }
+
+    private LineData getGraphLineData(ArrayList<HistoryData> dataSet) {
+        float xCount = 0;
+        float xIncrement = 0;
+        long previousDate = 0;
+        List<Entry> entries = new ArrayList<>();
+        for (HistoryData data : dataSet) {
+            if (previousDate > 0){
+                xIncrement = getXAxisIncrement(previousDate, data.longDate);
+                if (xIncrement > 1) {
+                    for (int i = 1; i < xIncrement; i++) {
+                        entries.add(new Entry(xCount+i, 0));
+                    }
+                }
+                xCount += xIncrement;
+            }
+            previousDate = data.longDate;
+            entries.add(new Entry(xCount, Float.valueOf(data.amount.substring(1))));
+            Log.d("graphTest - xCount", String.valueOf(xCount));
+        }
+
+        LineDataSet lineDataSet = new LineDataSet(entries, ""); // add entries to dataset
+        lineDataSet.setColor(Color.MAGENTA);
+        lineDataSet.setCircleColor(Color.MAGENTA);
+        lineDataSet.setCircleRadius(1f);
+        lineDataSet.setValueTextColor(Color.BLUE);
+
+        return new LineData(lineDataSet);
     }
 }
