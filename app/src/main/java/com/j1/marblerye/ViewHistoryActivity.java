@@ -73,10 +73,14 @@ public class ViewHistoryActivity extends AppCompatActivity {
         ArrayList<HistoryData> reversedDataSet = dataset;
         Collections.reverse(reversedDataSet);
         float xCount = 0;
+        long previousDate = 0;
         for (HistoryData data : reversedDataSet) {
+            if (previousDate > 0){
+                xCount += getXAxisIncrement(previousDate, data.longDate);
+            }
+            previousDate = data.longDate;
             entries.add(new Entry(xCount, Float.valueOf(data.amount.substring(1))));
-            xCount++;
-            Log.d("graphTest", String.valueOf(data.longDate));
+            Log.d("graphTest - xCount", String.valueOf(xCount));
         }
 
         LineDataSet lineDataSet = new LineDataSet(entries, ""); // add entries to dataset
@@ -161,5 +165,27 @@ public class ViewHistoryActivity extends AppCompatActivity {
         cursor.close();
 
         return dataset;
+    }
+
+    private float getXAxisIncrement(long previous, long current) {
+        Calendar calendar = Calendar.getInstance();
+        float chunkCounter = 0;
+        Log.d("getXAxisincrement - starting dates: ", MarbleUtils.convertLongToDate(previous, "ddMMMyyyy") +
+                " " + MarbleUtils.convertLongToDate(current, "ddMMMyyyy"));
+        int incrementedValue = 0;
+        while (previous < current) {
+            chunkCounter++;
+            calendar.setTimeInMillis(previous);
+            calendar.add(calendarChunkSize, 1);
+            incrementedValue = calendar.get(calendarChunkSize);
+            previous = calendar.getTimeInMillis();
+            calendar.setTimeInMillis(current);
+            if (calendar.get(calendarChunkSize) == incrementedValue) {
+                break;
+            }
+            Log.d("getXAxisincrement - date now: ", MarbleUtils.convertLongToDate(previous, "ddMMMyyyy"));
+        }
+
+        return chunkCounter;
     }
 }
