@@ -87,14 +87,21 @@ public class MarbleCalculator {
         // query db for all values entered today
         SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
         long date = 0;
+        Calendar calendar = Calendar.getInstance();
+        Log.d(TAG, "getTodaysSpending - date before mod: " + calendar.getTimeInMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         try {
-            date = MarbleUtils.getTodaysDateInMillis(context);
+            date = calendar.getTimeInMillis();
+            Log.d(TAG, "getTodaysSpending - today's date: " + date);
         } catch (Exception e) {
             Log.d(TAG, "exception caught!" + e.toString());
         }
         String[] projection = {};
 
-        String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " == ?";
+        String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " >= ?";
 
         String[] selectionArgs = {date + ""};
 
@@ -150,7 +157,7 @@ public class MarbleCalculator {
         }
         cursor.close();
         try {
-            currentDate = MarbleUtils.getTodaysDateInMillis(context);
+            currentDate = MarbleUtils.getTodaysDateInMillis();
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }

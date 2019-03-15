@@ -14,7 +14,6 @@ import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class MarbleUtils {
@@ -45,15 +44,10 @@ public class MarbleUtils {
         }
     }
 
-    public static long getTodaysDateInMillis(Context context) throws ParseException {
-        long value = 0;
+    public static long getTodaysDateInMillis() {
         Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.US);
-        calendar.setTime(dateFormat.parse(dateFormat.format(date)));
-        value = calendar.getTimeInMillis();
 
-        return value;
+        return calendar.getTimeInMillis();
     }
 
     public static boolean exportDatabaseToCsv(Context context, SQLiteDatabase database) {

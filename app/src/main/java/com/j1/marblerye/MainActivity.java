@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        // Fab button click will start new expense activity
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        calculateDataAndDisplay();
         // set listener for history buttons:
         Button buttonHistoryDaily = findViewById(R.id.see_daily_history);
         buttonHistoryDaily.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        // calculate averages and display values
+        calculateDataAndDisplay();
     }
 
     public void onResume() {
