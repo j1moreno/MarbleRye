@@ -23,6 +23,7 @@ public class NewExpenseInput extends AppCompatActivity {
 
     private static final String TAG = "NewExpenseActivity";
     private double incrementAmount = 1.00;
+    private SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,8 @@ public class NewExpenseInput extends AppCompatActivity {
         final EditText description = findViewById(R.id.editText_description);
 
         // set frequently used buttons
-        String [] mostUsedDescriptions = MarbleCalculator.getMostUsedDescriptions(getApplicationContext(), 3);
+        database = new MarbleDBHelper(this).getWritableDatabase();
+        String [] mostUsedDescriptions = MarbleCalculator.getMostUsedDescriptions(database, 3);
         // make sure we have at least 3 entries, otherwise write default values:
         if (mostUsedDescriptions.length < 3) {
             String [] defaultDesciptions = {"Lunch", "Gas", "Drinks"};
@@ -123,8 +125,6 @@ public class NewExpenseInput extends AppCompatActivity {
     }
 
     private void saveToDB() {
-        SQLiteDatabase database = new MarbleDBHelper(this).getWritableDatabase();
-
         // get data from inputs
         EditText amountInput = findViewById(R.id.editText_amount);
         EditText descriptionInput = findViewById(R.id.editText_description);

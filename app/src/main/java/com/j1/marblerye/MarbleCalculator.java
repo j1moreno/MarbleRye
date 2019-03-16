@@ -21,7 +21,7 @@ public class MarbleCalculator {
     private static final long MILLISECONDS_IN_A_DAY = 86400000;
     private static final int DAYS_IN_A_MONTH = 30;
 
-    public static double getAverageMonthlySpending(Context context) {
+    public static double getAverageMonthlySpending(SQLiteDatabase database) {
         ArrayList months = new ArrayList();
         Calendar calendar = Calendar.getInstance();
         long date;
@@ -29,7 +29,6 @@ public class MarbleCalculator {
         double average;
         double total = 0.00;
         // init database
-        SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
         // query for all entries
         Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
         // read data retrieved from DB
@@ -52,7 +51,7 @@ public class MarbleCalculator {
         return average;
     }
 
-    public static double getCurrentMonthSpending(Context context) {
+    public static double getCurrentMonthSpending(SQLiteDatabase database) {
         int tempMonth;
         double total = 0.00;
         long date;
@@ -60,7 +59,6 @@ public class MarbleCalculator {
         // get current month
         Calendar calendar = Calendar.getInstance();
         int currentMonth = calendar.get(Calendar.MONTH);
-        SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
         // query for all entries
         Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
         // read data retrieved from DB
@@ -83,9 +81,7 @@ public class MarbleCalculator {
         return total;
     }
 
-    public static double getTodaySpending(Context context) {
-        // query db for all values entered today
-        SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
+    public static double getTodaySpending(SQLiteDatabase database) {
         long date = 0;
         Calendar calendar = Calendar.getInstance();
         Log.d(TAG, "getTodaysSpending - date before mod: " + calendar.getTimeInMillis());
@@ -131,15 +127,13 @@ public class MarbleCalculator {
         return total;
     }
 
-    public static double getAverageDailySpending(Context context) {
+    public static double getAverageDailySpending(SQLiteDatabase database) {
         double average;
         double total = 0.00;
         int days;
         long currentDate = 0;
         long firstDate = 0;
         boolean firstEntry = true;
-        // init database
-        SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
         // query for all entries
         Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
         // read data retrieved from DB
@@ -162,7 +156,7 @@ public class MarbleCalculator {
             Log.d(TAG, e.toString());
         }
         // days is currentDate - firstDate, divided by MS in a day; add one to include today
-        days = (int) ((currentDate-firstDate)/86400000) + 1;    // include today
+        days = (int) ((currentDate-firstDate)/MILLISECONDS_IN_A_DAY) + 1;    // include today
         Log.d(TAG, "currentDate:  " + currentDate);
         Log.d(TAG, "firstDate:  " + firstDate);
         Log.d(TAG, "days:  " + days);
@@ -172,12 +166,7 @@ public class MarbleCalculator {
         return average;
     }
 
-    public static String [] getMostUsedDescriptions(Context context) {
-        return getMostUsedDescriptions(context, 1);
-    }
-
-    public static String [] getMostUsedDescriptions(Context context, int nthMax) {
-        SQLiteDatabase database = new MarbleDBHelper(context).getReadableDatabase();
+    public static String [] getMostUsedDescriptions(SQLiteDatabase database, int nthMax) {
         HashMap descriptionFrequencies = new HashMap();
         Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
         if (cursor.moveToFirst()) {

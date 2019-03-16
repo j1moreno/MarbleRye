@@ -23,6 +23,7 @@ public class EditExpenseActivity extends AppCompatActivity {
     private EditText description;
     private EditText date;
     private String id;
+    private SQLiteDatabase database;
 
     private double changeAmount = 1.00;
 
@@ -41,7 +42,8 @@ public class EditExpenseActivity extends AppCompatActivity {
         description = findViewById(R.id.editText_description);
         description.setText(extras.getString("DESCRIPTION"));
         // set frequently used buttons
-        String [] mostUsedDescriptions = MarbleCalculator.getMostUsedDescriptions(getApplicationContext(), 3);
+        database = new MarbleDBHelper(this).getWritableDatabase();
+        String [] mostUsedDescriptions = MarbleCalculator.getMostUsedDescriptions(database, 3);
         // make sure we have at least 3 entries, otherwise write default values:
         if (mostUsedDescriptions.length < 3) {
             String [] defaultDesciptions = {"Lunch", "Gas", "Drinks"};
@@ -122,8 +124,6 @@ public class EditExpenseActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Date is in the wrong format", Toast.LENGTH_LONG).show();
                     return;
                 }
-                // get writable database to update entry:
-                SQLiteDatabase database = new MarbleDBHelper(getApplicationContext()).getWritableDatabase();
                 database.update(MarbleDBContract.Expenses.TABLE_NAME, values, "_id=" + id, null);
                 Toast.makeText(getApplicationContext(), "Row " + id + " has been updated", Toast.LENGTH_SHORT).show();
                 finish();

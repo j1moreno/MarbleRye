@@ -21,6 +21,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +105,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void calculateDataAndDisplay() {
+        database = new MarbleDBHelper(this).getReadableDatabase();
         TextView spendToday = findViewById(R.id.textViewSpendToday);
-        spendToday.setText(getString(R.string.display_amount, MarbleCalculator.getTodaySpending(this)));
+        spendToday.setText(getString(R.string.display_amount, MarbleCalculator.getTodaySpending(database)));
         TextView spendDailyAverage = findViewById(R.id.textViewSpendAvg);
-        spendDailyAverage.setText(getString(R.string.display_amount, MarbleCalculator.getAverageDailySpending(this)));
+        spendDailyAverage.setText(getString(R.string.display_amount, MarbleCalculator.getAverageDailySpending(database)));
         TextView spendCurrentMonth = findViewById(R.id.textView_main_currentMonthAmt);
-        spendCurrentMonth.setText(getString(R.string.display_amount, MarbleCalculator.getCurrentMonthSpending(this)));
+        spendCurrentMonth.setText(getString(R.string.display_amount, MarbleCalculator.getCurrentMonthSpending(database)));
         TextView spendAverageMonthly = findViewById(R.id.textView_main_avgMonthAmt);
-        spendAverageMonthly.setText(getString(R.string.display_amount, MarbleCalculator.getAverageMonthlySpending(this)));
+        spendAverageMonthly.setText(getString(R.string.display_amount, MarbleCalculator.getAverageMonthlySpending(database)));
     }
 }
