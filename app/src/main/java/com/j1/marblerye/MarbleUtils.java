@@ -80,30 +80,17 @@ public class MarbleUtils {
             // only proceed if we have write access to storage
             File path = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DOWNLOADS);
-            // Make sure the path directory exists.
-            if(!path.exists())
-            {
-                // Make it, if it doesn't exit
-                path.mkdirs();
-            }
             final File file = new File(path, fileName);
-
-            // Save your stream, don't forget to flush() it before closing it.
-            try
-            {
+            try {
                 file.createNewFile();
                 FileOutputStream outputStream = new FileOutputStream(file);
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
                 outputStreamWriter.append(writer.getCSV());
-
                 outputStreamWriter.close();
-
                 outputStream.flush();
                 outputStream.close();
                 Toast.makeText(context, "File created in " + file.getPath(), Toast.LENGTH_LONG).show();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 Log.e("Exception", "File write failed: " + e.toString());
             }
         }
