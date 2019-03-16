@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -28,10 +27,10 @@ public class MarbleUtils {
     }
 
     public static long convertDateToLong(Context context, String date) {
-        return convertDateToLong(context, date, context.getString(R.string.date_format_pattern));
+        return convertDateToLong(date, context.getString(R.string.date_format_pattern));
     }
 
-    public static long convertDateToLong(Context context, String date, String format) {
+    public static long convertDateToLong(String date, String format) {
         try {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime((new SimpleDateFormat(format, Locale.US)).parse(date));
