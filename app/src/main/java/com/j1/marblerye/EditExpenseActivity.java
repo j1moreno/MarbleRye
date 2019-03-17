@@ -78,11 +78,13 @@ public class EditExpenseActivity extends AppCompatActivity {
             }
         });
         date = findViewById(R.id.editExpense_editText_date);
+        // can't edit this text by typing, only using date picker
         date.setInputType(InputType.TYPE_NULL);
         date.setText(MarbleUtils.convertLongToDate(extras.getLong("DATE"), getString(R.string.date_format_pattern)));
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // bundle current date so that date picker defaults to current date
                 Bundle bundle = new Bundle();
                 bundle.putLong("CURRENT_DATE", MarbleUtils.convertDateToLong(getApplicationContext(), date.getText().toString()));
                 DatePickerFragment newFragment = new DatePickerFragment();
@@ -102,28 +104,20 @@ public class EditExpenseActivity extends AppCompatActivity {
 
             }
         });
-        // Edit button to say update instead of add
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button buttonSaveToDB = findViewById(R.id.button);
+        buttonSaveToDB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!NewExpenseInput.isInputDataValid(getApplicationContext(), amount, description, date)) {
+                    // if input data is not valid, stop here and return
+                    return;
+                }
+                // save updated values to database
                 ContentValues values = new ContentValues();
                 values.put(MarbleDBContract.Expenses.COLUMN_AMOUNT, amount.getText().toString());
-                // check to see if description has been entered, otherwise don't add entry
-                if (description.getText().toString().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Must enter a description!", Toast.LENGTH_LONG).show();
-                    return;
-                }
                 values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, description.getText().toString().trim());
-                // make sure date is properly entered, otherwise don't add entry
-                try {
-                    long longDate = MarbleUtils.convertDateToLong(getApplicationContext(), date.getText().toString());
-                    values.put(MarbleDBContract.Expenses.COLUMN_DATE, longDate);
-                }
-                catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "Date is in the wrong format", Toast.LENGTH_LONG).show();
-                    return;
-                }
+                long longDate = MarbleUtils.convertDateToLong(getApplicationContext(), date.getText().toString());
+                values.put(MarbleDBContract.Expenses.COLUMN_DATE, longDate);
                 database.update(MarbleDBContract.Expenses.TABLE_NAME, values, "_id=" + id, null);
                 Toast.makeText(getApplicationContext(), "Row " + id + " has been updated", Toast.LENGTH_SHORT).show();
                 finish();

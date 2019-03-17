@@ -2,6 +2,7 @@ package com.j1.marblerye;
 
 import android.app.DialogFragment;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -129,25 +130,15 @@ public class NewExpenseInput extends AppCompatActivity {
         EditText amountInput = findViewById(R.id.editText_amount);
         EditText descriptionInput = findViewById(R.id.editText_description);
         TextView dateInput = findViewById(R.id.editExpense_editText_date);
-
-        ContentValues values = new ContentValues();
-        values.put(MarbleDBContract.Expenses.COLUMN_AMOUNT, amountInput.getText().toString());
-        // check to see if description has been entered, otherwise don't add entry
-        if (descriptionInput.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Must enter a description!", Toast.LENGTH_LONG).show();
-            return;
-        }
-        values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString().trim());
-        // make sure date is properly entered, otherwise don't add entry
-        try {
-            long date = MarbleUtils.convertDateToLong(this, dateInput.getText().toString());
-            values.put(MarbleDBContract.Expenses.COLUMN_DATE, date);
-        }
-        catch (Exception e) {
-            Toast.makeText(this, "Date is in the wrong format", Toast.LENGTH_LONG).show();
+        if (!isInputDataValid(this, amountInput, descriptionInput, dateInput)) {
+            // if input data is not valid, stop here and return
             return;
         }
         // got to this line, so it's OK to add entry to database
+        ContentValues values = new ContentValues();
+        values.put(MarbleDBContract.Expenses.COLUMN_AMOUNT, amountInput.getText().toString());
+        values.put(MarbleDBContract.Expenses.COLUMN_DESCRIPTION, descriptionInput.getText().toString().trim());
+        values.put(MarbleDBContract.Expenses.COLUMN_DATE, MarbleUtils.convertDateToLong(this, dateInput.getText().toString()));
         long newRowId = database.insert(MarbleDBContract.Expenses.TABLE_NAME, null, values);
 
         Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_SHORT).show();
@@ -167,5 +158,29 @@ public class NewExpenseInput extends AppCompatActivity {
         if (currentValue <= 0) return;
         double newValue = currentValue - incrementAmount;
         editTextAmount.setText(String.format("%.2f", newValue));
+    }
+
+    public static boolean isInputDataValid(Context context, EditText amountInput, EditText descriptionInput, TextView dateInput) {
+        // make sure amount entered is valid
+        try {
+            double amount = Double.parseDouble(amountInput.getText().toString());
+        } catch (Exception e) {
+            Log.e(TAG, "unable to convert amount input to string.");
+            return false;
+        }
+        // check to see if description has been entered, otherwise don't add entry
+        if (descriptionInput.getText().toString().isEmpty()) {
+            Toast.makeText(context, "Must enter a description!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        // make sure date is properly entered, otherwise don't add entry
+        long date = MarbleUtils.convertDateToLong(context, dateInput.getText().toString());
+        if (date == 0) {
+            // if 0 was returned, date was not parsable
+            return false;
+        }
+
+        // if we got here, all input data is valid, return true
+        return true;
     }
 }
