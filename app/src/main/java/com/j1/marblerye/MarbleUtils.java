@@ -26,6 +26,24 @@ public class MarbleUtils {
         return new SimpleDateFormat(dateFormat, Locale.US).format(calendar.getTime());
     }
 
+    public static long rewindToStartOfWeek(long input) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(input);
+        // set to beginning of day
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int today = calendar.get(Calendar.DAY_OF_WEEK);
+        while (today != Calendar.SUNDAY) {
+            // keep subtracting days until we get to the start of week
+            calendar.add(Calendar.DAY_OF_WEEK, -1);
+            today = calendar.get(Calendar.DAY_OF_WEEK);
+        }
+        // once here, calendar should be set to start of week
+        return calendar.getTimeInMillis();
+    }
+
     public static long convertDateToLong(Context context, String date) {
         return convertDateToLong(date, context.getString(R.string.date_format_pattern));
     }

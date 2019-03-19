@@ -41,12 +41,21 @@ public class ViewHistoryActivity extends AppCompatActivity {
         calendarChunkSize = intent.getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
         dateFormat = intent.getStringExtra("DATE_FORMAT");
         // set title based on what action started the activity
-        String title = (calendarChunkSize == Calendar.DAY_OF_MONTH) ? "Daily" : "Monthly";
+        String title = "";
+        String spendingPerChunk = "Spending Per ";
+        if (calendarChunkSize == Calendar.MONTH) {
+            title += "Monthly";
+            spendingPerChunk += "Month";
+        } else if (calendarChunkSize == Calendar.WEEK_OF_YEAR) {
+            title += "Weekly";
+            spendingPerChunk += "Week";
+        } else {
+            title += "Daily";
+            spendingPerChunk += "Day";
+        }
         title += " History";
         setTitle(title);
         TextView textView_spendingPerChunk = findViewById(R.id.viewHistory_textView_spendingPerChunk);
-        String spendingPerChunk = "Spending Per ";
-        spendingPerChunk += (calendarChunkSize == Calendar.DAY_OF_MONTH) ? "Day" : "Month";
         textView_spendingPerChunk.setText(spendingPerChunk);
         database = new MarbleDBHelper(this).getReadableDatabase();
         // create array list with desired data:
@@ -130,6 +139,10 @@ public class ViewHistoryActivity extends AppCompatActivity {
                 if (tempDay != calendar.get(calendarChunkSize)) {
                     if (currentDate != 0) {
                         data = new HistoryData();
+                        // special case for weekly spending:
+                        if (calendarChunkSize == Calendar.WEEK_OF_YEAR) {
+                            currentDate = MarbleUtils.rewindToStartOfWeek(currentDate);
+                        }
                         data.date = MarbleUtils.convertLongToDate(currentDate, dateFormat);
                         data.longDate = currentDate;
                         data.amount = getString(R.string.display_amount, tempAmount);
@@ -147,6 +160,10 @@ public class ViewHistoryActivity extends AppCompatActivity {
             }
             // add the last values after loop is done
             data = new HistoryData();
+            // special case for weekly spending:
+            if (calendarChunkSize == Calendar.WEEK_OF_YEAR) {
+                currentDate = MarbleUtils.rewindToStartOfWeek(currentDate);
+            }
             data.date = MarbleUtils.convertLongToDate(currentDate, dateFormat);
             data.longDate = currentDate;
             data.amount = getString(R.string.display_amount, tempAmount);
