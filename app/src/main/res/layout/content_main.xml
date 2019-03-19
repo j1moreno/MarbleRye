@@ -9,166 +9,240 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
-        android:layout_width="344dp"
-        android:layout_height="147dp"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="4dp"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintHorizontal_bias="0.49"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/daily_spend"
-            android:layout_width="237dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="16dp"
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:layout_width="344dp"
+            android:layout_height="147dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif"
-            android:text="@string/daily_spend"
-            android:textAppearance="@style/daily_spend" />
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="4dp" >
 
-        <TextView
-            android:id="@+id/today_"
-            android:layout_width="130dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="52dp"
-            android:fontFamily="sans-serif"
-            android:text="@string/today_"
-            android:textAppearance="@style/today_" />
+            <TextView
+                android:id="@+id/daily_spend"
+                android:layout_width="237dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/daily_spend"
+                android:textAppearance="@style/daily_spend" />
 
-        <TextView
-            android:id="@+id/average_"
-            android:layout_width="130dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="74dp"
-            android:fontFamily="sans-serif"
-            android:text="@string/average_"
-            android:textAppearance="@style/today_" />
+            <TextView
+                android:id="@+id/today_"
+                android:layout_width="130dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="52dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/today_"
+                android:textAppearance="@style/today_" />
 
-        <TextView
-            android:id="@+id/textViewSpendToday"
-            android:layout_width="75dp"
-            android:layout_height="18dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="253dp"
-            android:layout_marginTop="52dp"
-            android:fontFamily="sans-serif"
-            android:gravity="right"
-            android:text="@string/some_id"
-            android:textAppearance="@style/today_" />
+            <TextView
+                android:id="@+id/average_"
+                android:layout_width="130dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="74dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/average_"
+                android:textAppearance="@style/today_" />
 
-        <TextView
-            android:id="@+id/textViewSpendAvg"
-            android:layout_width="75dp"
-            android:layout_height="18dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="253dp"
-            android:layout_marginTop="74dp"
-            android:fontFamily="sans-serif"
-            android:gravity="right"
-            android:text="@string/some_id"
-            android:textAppearance="@style/today_" />
+            <TextView
+                android:id="@+id/textViewSpendToday"
+                android:layout_width="75dp"
+                android:layout_height="18dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="253dp"
+                android:layout_marginTop="52dp"
+                android:fontFamily="sans-serif"
+                android:gravity="right"
+                android:text="@string/some_id"
+                android:textAppearance="@style/today_" />
 
-        <Button
-            android:id="@+id/see_daily_history"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="112dp"
-            android:layout_marginStart="16dp"
-            android:background="@android:color/transparent"
-            android:text="SEE DAILY HISTORY"
-            android:textAppearance="@style/see_daily_h" />
+            <TextView
+                android:id="@+id/textViewSpendAvg"
+                android:layout_width="75dp"
+                android:layout_height="18dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="253dp"
+                android:layout_marginTop="74dp"
+                android:fontFamily="sans-serif"
+                android:gravity="right"
+                android:text="@string/some_id"
+                android:textAppearance="@style/today_" />
 
-    </android.support.v7.widget.CardView>
+            <Button
+                android:id="@+id/see_daily_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="112dp"
+                android:layout_marginStart="16dp"
+                android:background="@android:color/transparent"
+                android:text="SEE DAILY HISTORY"
+                android:textAppearance="@style/see_daily_h" />
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view2"
-        android:layout_width="344dp"
-        android:layout_height="148dp"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="4dp"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toBottomOf="@+id/card_view">
+        </android.support.v7.widget.CardView>
 
-        <TextView
-            android:id="@+id/monthly_spend"
-            android:layout_width="237dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif"
-            android:text="Monthly Spending"
-            android:textAppearance="@style/daily_spend" />
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view2"
+            android:layout_width="344dp"
+            android:layout_height="148dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="4dp" >
 
-        <TextView
-            android:id="@+id/this_month"
-            android:layout_width="130dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="52dp"
-            android:fontFamily="sans-serif"
-            android:text="This Month:"
-            android:textAppearance="@style/today_" />
+            <TextView
+                android:id="@+id/monthly_spend"
+                android:layout_width="237dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif"
+                android:text="Monthly Spending"
+                android:textAppearance="@style/daily_spend" />
 
-        <TextView
-            android:id="@+id/average_month"
-            android:layout_width="130dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="74dp"
-            android:fontFamily="sans-serif"
-            android:text="@string/average_"
-            android:textAppearance="@style/today_" />
+            <TextView
+                android:id="@+id/this_month"
+                android:layout_width="130dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="52dp"
+                android:fontFamily="sans-serif"
+                android:text="This Month:"
+                android:textAppearance="@style/today_" />
 
-        <TextView
-            android:id="@+id/textView_main_currentMonthAmt"
-            android:layout_width="75dp"
-            android:layout_height="18dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="253dp"
-            android:layout_marginTop="52dp"
-            android:fontFamily="sans-serif"
-            android:gravity="right"
-            android:text="@string/some_id"
-            android:textAppearance="@style/today_" />
+            <TextView
+                android:id="@+id/average_month"
+                android:layout_width="130dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="74dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/average_"
+                android:textAppearance="@style/today_" />
 
-        <TextView
-            android:id="@+id/textView_main_avgMonthAmt"
-            android:layout_width="75dp"
-            android:layout_height="18dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="253dp"
-            android:layout_marginTop="74dp"
-            android:fontFamily="sans-serif"
-            android:gravity="right"
-            android:text="@string/some_id"
-            android:textAppearance="@style/today_" />
+            <TextView
+                android:id="@+id/textView_main_currentMonthAmt"
+                android:layout_width="75dp"
+                android:layout_height="18dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="253dp"
+                android:layout_marginTop="52dp"
+                android:fontFamily="sans-serif"
+                android:gravity="right"
+                android:text="@string/some_id"
+                android:textAppearance="@style/today_" />
 
-        <Button
-            android:id="@+id/see_monthly_history"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="112dp"
-            android:layout_marginStart="16dp"
-            android:background="@android:color/transparent"
-            android:text="SEE MONTHLY HISTORY"
-            android:textAppearance="@style/see_daily_h" />
-    </android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/textView_main_avgMonthAmt"
+                android:layout_width="75dp"
+                android:layout_height="18dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="253dp"
+                android:layout_marginTop="74dp"
+                android:fontFamily="sans-serif"
+                android:gravity="right"
+                android:text="@string/some_id"
+                android:textAppearance="@style/today_" />
+
+            <Button
+                android:id="@+id/see_monthly_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="112dp"
+                android:layout_marginStart="16dp"
+                android:background="@android:color/transparent"
+                android:text="SEE MONTHLY HISTORY"
+                android:textAppearance="@style/see_daily_h" />
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view3"
+            android:layout_width="344dp"
+            android:layout_height="148dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="4dp" >
+
+            <TextView
+                android:id="@+id/weekly_spend"
+                android:layout_width="237dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif"
+                android:text="Weekly Spending"
+                android:textAppearance="@style/daily_spend" />
+
+            <TextView
+                android:id="@+id/this_week"
+                android:layout_width="130dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="52dp"
+                android:fontFamily="sans-serif"
+                android:text="This Week:"
+                android:textAppearance="@style/today_" />
+
+            <TextView
+                android:id="@+id/average_week"
+                android:layout_width="130dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="74dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/average_"
+                android:textAppearance="@style/today_" />
+
+            <TextView
+                android:id="@+id/textView_main_currentWeekAmt"
+                android:layout_width="75dp"
+                android:layout_height="18dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="253dp"
+                android:layout_marginTop="52dp"
+                android:fontFamily="sans-serif"
+                android:gravity="right"
+                android:text="@string/some_id"
+                android:textAppearance="@style/today_" />
+
+            <TextView
+                android:id="@+id/textView_main_avgWeekAmt"
+                android:layout_width="75dp"
+                android:layout_height="18dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="253dp"
+                android:layout_marginTop="74dp"
+                android:fontFamily="sans-serif"
+                android:gravity="right"
+                android:text="@string/some_id"
+                android:textAppearance="@style/today_" />
+
+            <Button
+                android:id="@+id/see_weekly_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="112dp"
+                android:layout_marginStart="16dp"
+                android:background="@android:color/transparent"
+                android:text="SEE WEEKLY HISTORY"
+                android:textAppearance="@style/see_daily_h" />
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
