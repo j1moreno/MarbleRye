@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -104,10 +103,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void calculateDataAndDisplay() {
         database = new MarbleDBHelper(this).getReadableDatabase();
+        // daily:
         TextView spendToday = findViewById(R.id.textViewSpendToday);
         spendToday.setText(getString(R.string.display_amount, MarbleCalculator.getTodaySpending(database)));
         TextView spendDailyAverage = findViewById(R.id.textViewSpendAvg);
         spendDailyAverage.setText(getString(R.string.display_amount, MarbleCalculator.getAverageDailySpending(database)));
+        // weekly:
+        TextView spendThisWeek = findViewById(R.id.textView_main_currentWeekAmt);
+        spendThisWeek.setText(getString(R.string.display_amount, MarbleCalculator.getSpendingThisWeek(database)));
+        TextView spendAverageWeekly = findViewById(R.id.textView_main_avgWeekAmt);
+        spendAverageWeekly.setText(getString(R.string.display_amount, MarbleCalculator.getAverageWeeklySpending(database)));
+        // monthly:
         TextView spendCurrentMonth = findViewById(R.id.textView_main_currentMonthAmt);
         spendCurrentMonth.setText(getString(R.string.display_amount, MarbleCalculator.getCurrentMonthSpending(database)));
         TextView spendAverageMonthly = findViewById(R.id.textView_main_avgMonthAmt);

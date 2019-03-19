@@ -81,6 +81,80 @@ public class MarbleCalculator {
         return total;
     }
 
+    public static double getSpendingThisWeek(SQLiteDatabase database) {
+        double spentThisWeek = 0;
+        // figure out previous monday and start dates from there
+        Calendar calendar = Calendar.getInstance();
+        // set to beginning of day
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int today = calendar.get(Calendar.DAY_OF_WEEK);
+        while (today != Calendar.MONDAY) {
+            // keep subtracting days until we get to the previous monday
+            calendar.add(Calendar.DAY_OF_WEEK, -1);
+            today = calendar.get(Calendar.DAY_OF_WEEK);
+        }
+        // once here, calendar should be set to Monday
+        long date = calendar.getTimeInMillis();
+        // search database for any date on or after last Monday
+        String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " >= ?";
+
+        String[] selectionArgs = {date + ""};
+
+        Cursor cursor = database.query(
+                MarbleDBContract.Expenses.TABLE_NAME,     // The table to query
+                null,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                      // don't sort
+        );
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                double value = Double.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_AMOUNT)));
+                Log.d(TAG, "value:  " + value);
+                spentThisWeek += value;
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+
+        return spentThisWeek;
+    }
+
+    public static double getAverageWeeklySpending(SQLiteDatabase database) {
+        ArrayList weeks = new ArrayList();
+        Calendar calendar = Calendar.getInstance();
+        long date;
+        int tempWeek;
+        double average;
+        double total = 0.00;
+        // init database
+        // query for all entries
+        Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
+        // read data retrieved from DB
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                double value = Double.valueOf(cursor.getString(2));
+                date = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
+                calendar.setTimeInMillis(date);
+                tempWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+                if (!weeks.contains(tempWeek)) {
+                    weeks.add(tempWeek);
+                }
+                total += value; // add up every value in DB
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        average = total/weeks.size();
+
+        return average;
+    }
+
     public static double getTodaySpending(SQLiteDatabase database) {
         long date = 0;
         Calendar calendar = Calendar.getInstance();
