@@ -91,7 +91,7 @@ public class MarbleCalculator {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         int today = calendar.get(Calendar.DAY_OF_WEEK);
-        while (today != Calendar.MONDAY) {
+        while (today != Calendar.SUNDAY) {
             // keep subtracting days until we get to the previous monday
             calendar.add(Calendar.DAY_OF_WEEK, -1);
             today = calendar.get(Calendar.DAY_OF_WEEK);
