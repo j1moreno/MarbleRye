@@ -30,6 +30,7 @@ public class EditExpenseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Edit Expense");
         // get extras from intent
         Bundle extras = getIntent().getExtras();
         // get row id for selected entry, we'll need this later

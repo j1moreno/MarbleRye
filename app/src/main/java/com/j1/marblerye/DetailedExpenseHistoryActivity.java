@@ -27,7 +27,8 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detailed_history);
         int calendarChunkSize = getIntent().getIntExtra("CALENDAR_CHUNK_SIZE", Calendar.DAY_OF_MONTH);
         String dateToSearch = getIntent().getStringExtra("DATE_TO_SEARCH");
-        setTitle(dateToSearch);
+        String titlePrefix = (calendarChunkSize == Calendar.WEEK_OF_YEAR) ? "Week of " : "";
+        setTitle(titlePrefix + dateToSearch);
         if (calendarChunkSize == Calendar.MONTH) {
             dateToSearch = "01 " + dateToSearch;
         }

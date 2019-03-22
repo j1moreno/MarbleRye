@@ -30,6 +30,7 @@ public class NewExpenseInput extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_expense_input);
+        setTitle("New Expense");
 
         Button addToDB = findViewById(R.id.button);
         addToDB.setOnClickListener(new View.OnClickListener() {
