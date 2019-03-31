@@ -92,7 +92,7 @@ public class ReadDBActivity extends AppCompatActivity {
                         MarbleDBContract.Expenses.TABLE_NAME,
                         null,
                         MarbleDBContract.Expenses.COLUMN_DESCRIPTION + " LIKE ?",
-                        new String[] {"%"+ searchBox.getText().toString() + "%" },
+                        new String[] {"%"+ searchBox.getText().toString().trim() + "%" },
                         null,
                         null,
                         MarbleDBContract.Expenses.COLUMN_DATE + " desc",
