@@ -73,31 +73,15 @@ public class ReadDBActivity extends AppCompatActivity {
                             " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " desc",
                     null);
         } else {
-            date = MarbleUtils.convertDateToLong(this, searchBox.getText().toString());
-            // check if date is valid:
-            if (date > 0) {
-                String selection =  MarbleDBContract.Expenses.COLUMN_DATE + " == ?";
-                String[] selectionArgs = {date + ""};
-                cursor = database.query(
-                        MarbleDBContract.Expenses.TABLE_NAME,     // The table to query
-                        null,                               // The columns to return
-                        selection,                                // The columns for the WHERE clause
-                        selectionArgs,                            // The values for the WHERE clause
-                        null,                                     // don't group the rows
-                        null,                                     // don't filter by row groups
-                        null                                      // don't sort
-                );
-            } else {
-                cursor = database.query(
-                        MarbleDBContract.Expenses.TABLE_NAME,
-                        null,
-                        MarbleDBContract.Expenses.COLUMN_DESCRIPTION + " LIKE ?",
-                        new String[] {"%"+ searchBox.getText().toString().trim() + "%" },
-                        null,
-                        null,
-                        MarbleDBContract.Expenses.COLUMN_DATE + " desc",
-                        null);
-            }
+            cursor = database.query(
+                    MarbleDBContract.Expenses.TABLE_NAME,
+                    null,
+                    MarbleDBContract.Expenses.COLUMN_DESCRIPTION + " LIKE ?",
+                    new String[] {"%"+ searchBox.getText().toString().trim() + "%" },
+                    null,
+                    null,
+                    MarbleDBContract.Expenses.COLUMN_DATE + " desc",
+                    null);
         }
         // feed database response into Cursor adapter
         String[] fromColums = {
