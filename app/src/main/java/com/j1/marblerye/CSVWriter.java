@@ -1,11 +1,10 @@
 package com.j1.marblerye;
 
 public class CSVWriter {
-    private StringBuilder builder;
+    private final StringBuilder builder;
     private String header;
 
     private final String NEW_LINE = "\n";
-    private final String COMMA = ",";
 
     public CSVWriter() {
         builder = new StringBuilder();
@@ -23,7 +22,7 @@ public class CSVWriter {
     public void writeLine(String... items) {
         for (String item : items) {
             builder.append(item);
-            builder.append(COMMA);
+            builder.append(",");
         }
     }
 
