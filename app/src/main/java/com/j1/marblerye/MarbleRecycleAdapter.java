@@ -23,7 +23,6 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
     // you provide access to all the views for a data item in a view holder
     public static abstract class ItemHolder extends RecyclerView.ViewHolder {
 
-        // RecycleRowData object contains the data to be defined
         TextView description;
         TextView date;
         TextView amount;
