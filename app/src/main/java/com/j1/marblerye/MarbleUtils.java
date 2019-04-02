@@ -48,7 +48,7 @@ public class MarbleUtils {
         return convertDateToLong(date, context.getString(R.string.date_format_pattern));
     }
 
-    public static long convertDateToLong(String date, String format) {
+    private static long convertDateToLong(String date, String format) {
         try {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime((new SimpleDateFormat(format, Locale.US)).parse(date));
@@ -110,6 +110,7 @@ public class MarbleUtils {
                 Toast.makeText(context, "File created in " + file.getPath(), Toast.LENGTH_LONG).show();
             } catch (IOException e) {
                 Log.e("Exception", "File write failed: " + e.toString());
+                return false;
             }
         }
 

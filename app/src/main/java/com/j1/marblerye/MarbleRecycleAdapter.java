@@ -11,10 +11,8 @@ import java.util.ArrayList;
 
 public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdapter.ItemHolder> {
     private ArrayList<HistoryData> mDataset;
-    private int rowLayoutId;
+    private final int rowLayoutId;
     private OnItemClickListener mListener;
-    private RecycleRowData mRowData;
-    private TwoItemHolder mHolder;
 
     public interface OnItemClickListener {
         void onItemClick(HistoryData data);
@@ -26,29 +24,20 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
     public static abstract class ItemHolder extends RecyclerView.ViewHolder {
 
         // RecycleRowData object contains the data to be defined
-        public TextView description;
-        public TextView date;
-        public TextView amount;
+        TextView description;
+        TextView date;
+        TextView amount;
 
-        public ItemHolder(View v) {
+        ItemHolder(View v) {
             super(v);
         }
 
-        public abstract void bind(HistoryData item, final OnItemClickListener listener);
+        protected abstract void bind(HistoryData item, final OnItemClickListener listener);
     }
 
-    public static class TwoItemHolder extends ItemHolder {
+    protected static class TwoItemHolder extends ItemHolder {
 
-        // RecycleRowData object contains the data to be defined
-        public RecycleRowData rowData;
-
-        public TwoItemHolder(View v, RecycleRowData rd) {
-            super(v);
-            rowData = rd;
-            rowData.bindViews(v);
-        }
-
-        public TwoItemHolder(View v) {
+        TwoItemHolder(View v) {
             super(v);
             date = v.findViewById(R.id.history_description);
             amount = v.findViewById(R.id.history_amount);
@@ -68,9 +57,9 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
         }
     }
 
-    public static class ThreeItemHolder extends ItemHolder {
+    protected static class ThreeItemHolder extends ItemHolder {
 
-        public ThreeItemHolder(View v) {
+        ThreeItemHolder(View v) {
             super(v);
             description = v.findViewById(R.id.textViewDesc);
             amount = v.findViewById(R.id.textViewAmt);
@@ -118,11 +107,6 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.bind(mDataset.get(position), mListener);
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

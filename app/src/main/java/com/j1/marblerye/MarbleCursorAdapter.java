@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class MarbleCursorAdapter extends SimpleCursorAdapter{
 
@@ -21,6 +22,6 @@ public class MarbleCursorAdapter extends SimpleCursorAdapter{
         TextView date = view.findViewById(R.id.textViewDate);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.valueOf(date.getText().toString()));
-        date.setText(new SimpleDateFormat(context.getString(R.string.date_format_pattern)).format(calendar.getTime()));
+        date.setText(new SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.US).format(calendar.getTime()));
     }
 }

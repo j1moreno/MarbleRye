@@ -120,7 +120,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
     }
 
     private ArrayList<HistoryData> getDataset() {
-        ArrayList<HistoryData> dataset = new ArrayList<HistoryData>();
+        ArrayList<HistoryData> dataset = new ArrayList<>();
         // get data from database
         Cursor cursor = database.rawQuery(
                 "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
@@ -179,7 +179,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
         float chunkCounter = 0;
         Log.d("getXAxisincrement - starting dates: ", MarbleUtils.convertLongToDate(previous, "ddMMMyyyy") +
                 " " + MarbleUtils.convertLongToDate(current, "ddMMMyyyy"));
-        int incrementedValue = 0;
+        int incrementedValue;
         while (previous < current) {
             chunkCounter++;
             calendar.setTimeInMillis(previous);
@@ -198,7 +198,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
 
     private LineData getGraphLineData(ArrayList<HistoryData> dataSet) {
         float xCount = 0;
-        float xIncrement = 0;
+        float xIncrement;
         long previousDate = 0;
         List<Entry> entries = new ArrayList<>();
         for (HistoryData data : dataSet) {

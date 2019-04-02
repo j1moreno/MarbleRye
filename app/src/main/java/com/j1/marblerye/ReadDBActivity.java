@@ -14,8 +14,6 @@ import android.widget.SimpleCursorAdapter;
 
 public class ReadDBActivity extends AppCompatActivity {
 
-    private int index = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +60,8 @@ public class ReadDBActivity extends AppCompatActivity {
     private void readFromDB() {
         EditText searchBox = findViewById(R.id.editText_dateSearch);
 
-        long date = 0;
-        String response = "";
         SQLiteDatabase database = new MarbleDBHelper(this).getReadableDatabase();
-        Cursor cursor = null;
+        Cursor cursor;
 
         if (searchBox.getText().toString().equals("")) {
             cursor = database.rawQuery(
@@ -84,7 +80,7 @@ public class ReadDBActivity extends AppCompatActivity {
                     null);
         }
         // feed database response into Cursor adapter
-        String[] fromColums = {
+        String[] fromColumns = {
                 MarbleDBContract.Expenses.COLUMN_AMOUNT,
                 MarbleDBContract.Expenses.COLUMN_DESCRIPTION,
                 MarbleDBContract.Expenses.COLUMN_DATE
@@ -95,7 +91,7 @@ public class ReadDBActivity extends AppCompatActivity {
                 R.id.textViewDate
         };
         SimpleCursorAdapter adapter = new MarbleCursorAdapter(this,
-                R.layout.database_read_item, cursor, fromColums, toViews, 0);
+                R.layout.database_read_item, cursor, fromColumns, toViews, 0);
         ListView listView = findViewById(R.id.listViewDB);
         listView.setAdapter(adapter);
     }
