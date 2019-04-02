@@ -46,9 +46,13 @@ public class MarbleCalculator {
             }
         }
         cursor.close();
-        average = total/months.size();
-
-        return average;
+        // Don't divide by 0, return 0 instead
+        if (months.size() <= 0) {
+            return 0.00;
+        } else {
+            average = total/months.size();
+            return average;
+        }
     }
 
     public static double getCurrentMonthSpending(SQLiteDatabase database) {
@@ -150,9 +154,13 @@ public class MarbleCalculator {
             }
         }
         cursor.close();
-        average = total/weeks.size();
-
-        return average;
+        // Don't divide by 0, return 0 instead
+        if (weeks.size() <= 0) {
+            return 0.00;
+        } else {
+            average = total/weeks.size();
+            return average;
+        }
     }
 
     public static double getTodaySpending(SQLiteDatabase database) {
