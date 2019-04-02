@@ -221,6 +221,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
         lineDataSet.setCircleColor(Color.MAGENTA);
         lineDataSet.setCircleRadius(1f);
         lineDataSet.setValueTextColor(Color.BLUE);
+        lineDataSet.setHighLightColor(Color.BLUE);
 
         return new LineData(lineDataSet);
     }
