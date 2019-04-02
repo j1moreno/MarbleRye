@@ -1,6 +1,5 @@
 package com.j1.marblerye;
 
-import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,7 +22,7 @@ import java.util.Locale;
 public class NewExpenseInput extends AppCompatActivity {
 
     private static final String TAG = "NewExpenseActivity";
-    private double incrementAmount = 1.00;
+    private final double incrementAmount = 1.00;
     private SQLiteDatabase database;
 
     @Override
@@ -62,9 +61,10 @@ public class NewExpenseInput extends AppCompatActivity {
         database = new MarbleDBHelper(this).getWritableDatabase();
         String [] mostUsedDescriptions = MarbleCalculator.getMostUsedDescriptions(database, 3);
         // make sure we have at least 3 entries, otherwise write default values:
-        if (mostUsedDescriptions.length < 3) {
-            String [] defaultDesciptions = {"Lunch", "Gas", "Drinks"};
-            mostUsedDescriptions = defaultDesciptions;
+        if (mostUsedDescriptions[mostUsedDescriptions.length-1] == null) {
+            // if last element is null, not enough descriptions to show most used yet, so show default
+            Log.d(TAG, "Writing default descriptions");
+            mostUsedDescriptions = new String[] {"Lunch", "Gas", "Drinks"};
         }
         Button mostUsed1 = findViewById(R.id.editExpense_button_mostUsed1);
         Button mostUsed2 = findViewById(R.id.editExpense_button_mostUsed2);
@@ -150,7 +150,7 @@ public class NewExpenseInput extends AppCompatActivity {
         EditText editTextAmount = findViewById(R.id.editText_amount);
         double currentValue = Double.valueOf(editTextAmount.getText().toString());
         double newValue = currentValue + incrementAmount;
-        editTextAmount.setText(String.format("%.2f", newValue));
+        editTextAmount.setText(String.format(Locale.US, "%.2f", newValue));
     }
 
     private void decreaseAmount() {
@@ -158,12 +158,13 @@ public class NewExpenseInput extends AppCompatActivity {
         double currentValue = Double.valueOf(editTextAmount.getText().toString());
         if (currentValue <= 0) return;
         double newValue = currentValue - incrementAmount;
-        editTextAmount.setText(String.format("%.2f", newValue));
+        editTextAmount.setText(String.format(Locale.US, "%.2f", newValue));
     }
 
     public static boolean isInputDataValid(Context context, EditText amountInput, EditText descriptionInput, TextView dateInput) {
         // make sure amount entered is valid
         try {
+            //noinspection unused: trying to parse, in order to force exception in case it's invalid
             double amount = Double.parseDouble(amountInput.getText().toString());
         } catch (Exception e) {
             Log.e(TAG, "unable to convert amount input to string.");
@@ -176,12 +177,8 @@ public class NewExpenseInput extends AppCompatActivity {
         }
         // make sure date is properly entered, otherwise don't add entry
         long date = MarbleUtils.convertDateToLong(context, dateInput.getText().toString());
-        if (date == 0) {
-            // if 0 was returned, date was not parsable
-            return false;
-        }
 
-        // if we got here, all input data is valid, return true
-        return true;
+        // return true if date is not 0
+        return date != 0;
     }
 }
