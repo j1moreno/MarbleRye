@@ -8,9 +8,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,13 +38,13 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
         database = new MarbleDBHelper(this).getReadableDatabase();
 
         // create array list with desired data:
-        ArrayList<HistoryData> dataset = getDataset();
+        ArrayList<HistoryData> dataSet = getDataSet();
 
         // create recycle view and adapter for data
         RecyclerView recyclerView = findViewById(R.id.detailedHistory_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // specify an adapter (see also next example)
-        mAdapter = new MarbleRecycleAdapter(dataset, R.layout.database_read_item);
+        mAdapter = new MarbleRecycleAdapter(dataSet, R.layout.database_read_item);
         mAdapter.setOnItemClickListener(new MarbleRecycleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(HistoryData data) {
@@ -69,13 +66,13 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
     }
 
     public void onResume() {
-        ArrayList<HistoryData> dataset = getDataset();
-        mAdapter.setData(dataset);
+        ArrayList<HistoryData> dataSet = getDataSet();
+        mAdapter.setData(dataSet);
         mAdapter.notifyDataSetChanged();
         super.onResume();
     }
 
-    private ArrayList<HistoryData> getDataset() {
+    private ArrayList<HistoryData> getDataSet() {
         Cursor cursor = database.rawQuery(
                 "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
                         " where " + MarbleDBContract.Expenses.COLUMN_DATE + " >= " + dateLower +
@@ -84,7 +81,7 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
                 null);
 
         // create array list with desired data:
-        ArrayList<HistoryData> dataset = new ArrayList<HistoryData>();
+        ArrayList<HistoryData> dataSet = new ArrayList<>();
         HistoryData data;
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
@@ -93,12 +90,12 @@ public class DetailedExpenseHistoryActivity extends AppCompatActivity {
                 data.description = cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DESCRIPTION));
                 data.date = MarbleUtils.convertLongToDate(cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE)), "dd MMM yyyy");
                 data.amount = getString(R.string.display_amount, Double.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_AMOUNT))));
-                dataset.add(data);
+                dataSet.add(data);
                 cursor.moveToNext();
             }
         }
         cursor.close();
 
-        return dataset;
+        return dataSet;
     }
 }
