@@ -98,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.see_all_history) {
             Intent intent = new Intent(MainActivity.this, ReadDBActivity.class);
             startActivity(intent);
+        } else if (id == R.id.about) {
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

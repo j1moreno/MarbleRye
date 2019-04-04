@@ -25,7 +25,8 @@
         <activity android:name=".NewExpenseInput" />
         <activity android:name=".EditExpenseActivity" />
         <activity android:name=".ViewHistoryActivity" />
-        <activity android:name=".DetailedExpenseHistoryActivity"></activity>
+        <activity android:name=".DetailedExpenseHistoryActivity" />
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

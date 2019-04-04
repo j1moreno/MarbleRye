@@ -4,9 +4,12 @@
     tools:context="com.j1.marblerye.MainActivity" >
     <item android:id="@+id/action_exportCsv"
         android:title="@string/action_exportCsv"
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         app:showAsAction="never" />
     <item android:id="@+id/see_all_history"
         android:title="See All History"
         android:orderInCategory="100" />
+    <item android:id="@+id/about"
+        android:title="About"
+        android:orderInCategory="300" />
 </menu>
