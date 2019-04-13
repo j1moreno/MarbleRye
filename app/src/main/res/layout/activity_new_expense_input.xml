@@ -16,9 +16,9 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:text="Amount"
+            android:text="Amount:"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="8dp"/>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -70,9 +70,9 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:text="Description"
+            android:text="Description:"
             android:layout_marginTop="48dp"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="8dp"/>
 
         <EditText
             android:id="@+id/editText_description"
@@ -94,7 +94,7 @@
             android:textSize="14sp"
             android:text="Most Used:"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="8dp"/>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -143,9 +143,9 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:text="Date"
+            android:text="Date:"
             android:layout_marginTop="48dp"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="8dp"/>
 
         <EditText
             android:id="@+id/editExpense_editText_date"
@@ -165,8 +165,8 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@color/colorAccent"
         android:text="Save"
