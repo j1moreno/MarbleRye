@@ -217,7 +217,10 @@ public class MarbleCalculator {
         long firstDate = 0;
         boolean firstEntry = true;
         // query for all entries
-        Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
+        Cursor cursor = database.rawQuery(
+                "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
+                        " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " asc",
+                null);
         // read data retrieved from DB
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
