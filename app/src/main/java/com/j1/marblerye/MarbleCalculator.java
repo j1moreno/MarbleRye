@@ -22,7 +22,6 @@ public class MarbleCalculator {
     private static final int DAYS_IN_A_MONTH = 30;
 
     public static double getAverageMonthlySpending(SQLiteDatabase database) {
-        ArrayList months = new ArrayList();
         Calendar calendar = Calendar.getInstance();
         long date;
         int previousMonth = 0;
@@ -158,35 +157,62 @@ public class MarbleCalculator {
     }
 
     public static double getAverageWeeklySpending(SQLiteDatabase database) {
-        ArrayList weeks = new ArrayList();
         Calendar calendar = Calendar.getInstance();
         long date;
-        int tempWeek;
+        int previousWeek = 0;
+        int currentWeek;
         double average;
         double total = 0.00;
+        int weekCount = 0;
         // init database
         // query for all entries
-        Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
+        Cursor cursor = database.rawQuery(
+                "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
+                        " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " asc",
+                null);
         // read data retrieved from DB
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                double value = Double.valueOf(cursor.getString(2));
+                // get amount field from entry
+                double amount = Double.valueOf(cursor.getString(2));
+                // get date field, in long format
                 date = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
+                // convert long date to calendar format
                 calendar.setTimeInMillis(date);
-                tempWeek = calendar.get(Calendar.WEEK_OF_YEAR);
-                if (!weeks.contains(tempWeek)) {
-                    weeks.add(tempWeek);
+                // get week from calendar
+                currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+                Log.d(TAG, "previousWeek: " + previousWeek);
+                Log.d(TAG, "currentWeek: " + currentWeek);
+                if (weekCount == 0) {
+                    // no weeks have been counted yet, just add 1
+                    weekCount += 1;
+                } else {
+                    // if current week has changed from previous entry,
+                    // set calendar to match previous week
+                    if (previousWeek != currentWeek) calendar.set(Calendar.WEEK_OF_YEAR, previousWeek);
+                    // increment until they match
+                    while (previousWeek != currentWeek) {
+                        // increment previous week by 1
+                        calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                        previousWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+                        // increment number of weeks
+                        weekCount += 1;
+                    }
                 }
-                total += value; // add up every value in DB
+                // set previousWeek for next pass
+                previousWeek = currentWeek;
+                total += amount; // add up every value in DB
                 cursor.moveToNext();
+                // log values
+                Log.d(TAG, "weekCount: " + weekCount);
             }
         }
         cursor.close();
         // Don't divide by 0, return 0 instead
-        if (weeks.size() <= 0) {
+        if (weekCount <= 0) {
             return 0.00;
         } else {
-            average = total/weeks.size();
+            average = total/weekCount;
             return average;
         }
     }
