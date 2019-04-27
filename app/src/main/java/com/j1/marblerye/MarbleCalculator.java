@@ -25,32 +25,60 @@ public class MarbleCalculator {
         ArrayList months = new ArrayList();
         Calendar calendar = Calendar.getInstance();
         long date;
-        int tempMonth;
+        int previousMonth = 0;
+        int currentMonth;
         double average;
         double total = 0.00;
+        int monthCount = 0;
         // init database
         // query for all entries
-        Cursor cursor = database.rawQuery("select * from "+MarbleDBContract.Expenses.TABLE_NAME,null);
+        Cursor cursor = database.rawQuery(
+                "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
+                        " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " asc",
+                null);
         // read data retrieved from DB
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                double value = Double.valueOf(cursor.getString(2));
+                // get amount field from entry
+                double amount = Double.valueOf(cursor.getString(2));
+                // get date field, in long format
                 date = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
+                // convert long date to calendar format
                 calendar.setTimeInMillis(date);
-                tempMonth = calendar.get(Calendar.MONTH);
-                if (!months.contains(tempMonth)) {
-                    months.add(tempMonth);
+                // get month from calendar
+                currentMonth = calendar.get(Calendar.MONTH);
+                Log.d(TAG, "previousMonth: " + previousMonth);
+                Log.d(TAG, "currentMonth: " + currentMonth);
+                if (monthCount == 0) {
+                    // no months have been counted yet, just add 1
+                    monthCount += 1;
+                } else {
+                    // if current month has changed from previous entry,
+                    // set calendar to match previous month
+                    if (previousMonth != currentMonth) calendar.set(Calendar.MONTH, previousMonth);
+                    // increment until they match
+                    while (previousMonth != currentMonth) {
+                        // increment previous month by 1
+                        calendar.add(Calendar.MONTH, 1);
+                        previousMonth = calendar.get(Calendar.MONTH);
+                        // increment number of months
+                        monthCount += 1;
+                    }
                 }
-                total += value; // add up every value in DB
+                // set previousMonth for next pass
+                previousMonth = currentMonth;
+                total += amount; // add up every value in DB
                 cursor.moveToNext();
+                // log values
+                Log.d(TAG, "monthCount: " + monthCount);
             }
         }
         cursor.close();
         // Don't divide by 0, return 0 instead
-        if (months.size() <= 0) {
+        if (monthCount <= 0) {
             return 0.00;
         } else {
-            average = total/months.size();
+            average = total/monthCount;
             return average;
         }
     }
