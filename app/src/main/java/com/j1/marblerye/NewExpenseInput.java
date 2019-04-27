@@ -142,7 +142,7 @@ public class NewExpenseInput extends AppCompatActivity {
         values.put(MarbleDBContract.Expenses.COLUMN_DATE, MarbleUtils.convertDateToLong(this, dateInput.getText().toString()));
         long newRowId = database.insert(MarbleDBContract.Expenses.TABLE_NAME, null, values);
 
-        Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Expense #" + newRowId + " saved", Toast.LENGTH_SHORT).show();
         finish();
     }
 

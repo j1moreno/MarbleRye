@@ -119,7 +119,7 @@ public class EditExpenseActivity extends AppCompatActivity {
                 long longDate = MarbleUtils.convertDateToLong(getApplicationContext(), date.getText().toString());
                 values.put(MarbleDBContract.Expenses.COLUMN_DATE, longDate);
                 database.update(MarbleDBContract.Expenses.TABLE_NAME, values, "_id=" + id, null);
-                Toast.makeText(getApplicationContext(), "Row " + id + " has been updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Expense has been updated", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

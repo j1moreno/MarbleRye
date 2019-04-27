@@ -70,7 +70,6 @@ public class ViewHistoryActivity extends AppCompatActivity {
             public void onItemClick(HistoryData data) {
                 Intent intent = new Intent(ViewHistoryActivity.this, DetailedExpenseHistoryActivity.class);
                 String date = data.date;
-                Toast.makeText(getApplicationContext(), date, Toast.LENGTH_SHORT).show();
                 intent.putExtra("DATE_TO_SEARCH", date);
                 intent.putExtra("DATE_FORMAT", dateFormat);
                 intent.putExtra("CALENDAR_CHUNK_SIZE", calendarChunkSize);
