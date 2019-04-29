@@ -1,6 +1,5 @@
 package com.j1.marblerye;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -18,17 +17,15 @@ import java.util.Set;
 public class MarbleCalculator {
 
     private static final String TAG = "MarbleCalculator";
-    private static final long MILLISECONDS_IN_A_DAY = 86400000;
-    private static final int DAYS_IN_A_MONTH = 30;
 
-    public static double getAverageMonthlySpending(SQLiteDatabase database) {
+    private static double getAverageIntervalSpending(SQLiteDatabase database, int calendarInterval) {
         Calendar calendar = Calendar.getInstance();
         long date;
-        int previousMonth = 0;
-        int currentMonth;
+        int previousInterval = 0;
+        int currentInterval;
         double average;
         double total = 0.00;
-        int monthCount = 0;
+        int intervalCount = 0;
         // init database
         // query for all entries
         Cursor cursor = database.rawQuery(
@@ -44,42 +41,54 @@ public class MarbleCalculator {
                 date = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
                 // convert long date to calendar format
                 calendar.setTimeInMillis(date);
-                // get month from calendar
-                currentMonth = calendar.get(Calendar.MONTH);
-                Log.d(TAG, "previousMonth: " + previousMonth);
-                Log.d(TAG, "currentMonth: " + currentMonth);
-                if (monthCount == 0) {
-                    // no months have been counted yet, just add 1
-                    monthCount += 1;
+                // get interval from calendar
+                currentInterval = calendar.get(calendarInterval);
+                Log.d(TAG, "previousInterval: " + previousInterval);
+                Log.d(TAG, "currentInterval: " + currentInterval);
+                if (intervalCount == 0) {
+                    // no intervals have been counted yet, just add 1
+                    intervalCount += 1;
                 } else {
-                    // if current month has changed from previous entry,
-                    // set calendar to match previous month
-                    if (previousMonth != currentMonth) calendar.set(Calendar.MONTH, previousMonth);
+                    // if current interval has changed from previous entry,
+                    // set calendar to match previous interval
+                    if (previousInterval != currentInterval) calendar.set(calendarInterval, previousInterval);
                     // increment until they match
-                    while (previousMonth != currentMonth) {
-                        // increment previous month by 1
-                        calendar.add(Calendar.MONTH, 1);
-                        previousMonth = calendar.get(Calendar.MONTH);
-                        // increment number of months
-                        monthCount += 1;
+                    while (previousInterval != currentInterval) {
+                        // increment previous interval by 1
+                        calendar.add(calendarInterval, 1);
+                        previousInterval = calendar.get(calendarInterval);
+                        // increment number of intervals
+                        intervalCount += 1;
                     }
                 }
-                // set previousMonth for next pass
-                previousMonth = currentMonth;
+                // set previousInterval for next pass
+                previousInterval = currentInterval;
                 total += amount; // add up every value in DB
                 cursor.moveToNext();
                 // log values
-                Log.d(TAG, "monthCount: " + monthCount);
+                Log.d(TAG, "intervalCount: " + intervalCount);
             }
         }
         cursor.close();
         // Don't divide by 0, return 0 instead
-        if (monthCount <= 0) {
+        if (intervalCount <= 0) {
             return 0.00;
         } else {
-            average = total/monthCount;
+            average = total/intervalCount;
             return average;
         }
+    }
+
+    public static double getAverageMonthlySpending(SQLiteDatabase database) {
+        return getAverageIntervalSpending(database, Calendar.MONTH);
+    }
+
+    public static double getAverageWeeklySpending(SQLiteDatabase database) {
+        return getAverageIntervalSpending(database, Calendar.WEEK_OF_YEAR);
+    }
+
+    public static double getAverageDailySpending(SQLiteDatabase database) {
+        return getAverageIntervalSpending(database, Calendar.DAY_OF_YEAR);
     }
 
     public static double getCurrentMonthSpending(SQLiteDatabase database) {
@@ -156,67 +165,6 @@ public class MarbleCalculator {
         return spentThisWeek;
     }
 
-    public static double getAverageWeeklySpending(SQLiteDatabase database) {
-        Calendar calendar = Calendar.getInstance();
-        long date;
-        int previousWeek = 0;
-        int currentWeek;
-        double average;
-        double total = 0.00;
-        int weekCount = 0;
-        // init database
-        // query for all entries
-        Cursor cursor = database.rawQuery(
-                "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
-                        " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " asc",
-                null);
-        // read data retrieved from DB
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                // get amount field from entry
-                double amount = Double.valueOf(cursor.getString(2));
-                // get date field, in long format
-                date = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
-                // convert long date to calendar format
-                calendar.setTimeInMillis(date);
-                // get week from calendar
-                currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
-                Log.d(TAG, "previousWeek: " + previousWeek);
-                Log.d(TAG, "currentWeek: " + currentWeek);
-                if (weekCount == 0) {
-                    // no weeks have been counted yet, just add 1
-                    weekCount += 1;
-                } else {
-                    // if current week has changed from previous entry,
-                    // set calendar to match previous week
-                    if (previousWeek != currentWeek) calendar.set(Calendar.WEEK_OF_YEAR, previousWeek);
-                    // increment until they match
-                    while (previousWeek != currentWeek) {
-                        // increment previous week by 1
-                        calendar.add(Calendar.WEEK_OF_YEAR, 1);
-                        previousWeek = calendar.get(Calendar.WEEK_OF_YEAR);
-                        // increment number of weeks
-                        weekCount += 1;
-                    }
-                }
-                // set previousWeek for next pass
-                previousWeek = currentWeek;
-                total += amount; // add up every value in DB
-                cursor.moveToNext();
-                // log values
-                Log.d(TAG, "weekCount: " + weekCount);
-            }
-        }
-        cursor.close();
-        // Don't divide by 0, return 0 instead
-        if (weekCount <= 0) {
-            return 0.00;
-        } else {
-            average = total/weekCount;
-            return average;
-        }
-    }
-
     public static double getTodaySpending(SQLiteDatabase database) {
         long date = 0;
         Calendar calendar = Calendar.getInstance();
@@ -261,48 +209,6 @@ public class MarbleCalculator {
         Log.d(TAG, "total:  " + total);
 
         return total;
-    }
-
-    public static double getAverageDailySpending(SQLiteDatabase database) {
-        double average;
-        double total = 0.00;
-        int days;
-        long currentDate = 0;
-        long firstDate = 0;
-        boolean firstEntry = true;
-        // query for all entries
-        Cursor cursor = database.rawQuery(
-                "select * from " + MarbleDBContract.Expenses.TABLE_NAME +
-                        " order by " + MarbleDBContract.Expenses.COLUMN_DATE + " asc",
-                null);
-        // read data retrieved from DB
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                double value = Double.valueOf(cursor.getString(2));
-                if (firstEntry) {
-                    // if first entry contains first date
-                    firstDate = cursor.getLong(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_DATE));
-                    firstEntry = false; // set flag, no longer first entry
-                }
-                total += value; // add up every value in DB
-                cursor.moveToNext();
-            }
-        }
-        cursor.close();
-        try {
-            currentDate = MarbleUtils.getTodaysDateInMillis();
-        } catch (Exception e) {
-            Log.d(TAG, e.toString());
-        }
-        // days is currentDate - firstDate, divided by MS in a day; add one to include today
-        days = (int) ((currentDate-firstDate)/MILLISECONDS_IN_A_DAY) + 1;    // include today
-        Log.d(TAG, "currentDate:  " + currentDate);
-        Log.d(TAG, "firstDate:  " + firstDate);
-        Log.d(TAG, "days:  " + days);
-        Log.d(TAG, "difference: " + (currentDate-firstDate));
-        average = total/days;
-
-        return average;
     }
 
     public static String [] getMostUsedDescriptions(SQLiteDatabase database, int nthMax) {
