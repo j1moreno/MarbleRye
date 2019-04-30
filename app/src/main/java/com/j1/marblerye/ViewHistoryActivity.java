@@ -176,8 +176,6 @@ public class ViewHistoryActivity extends AppCompatActivity {
     private float getXAxisIncrement(long previous, long current) {
         Calendar calendar = Calendar.getInstance();
         float chunkCounter = 0;
-        Log.d("getXAxisincrement - starting dates: ", MarbleUtils.convertLongToDate(previous, "ddMMMyyyy") +
-                " " + MarbleUtils.convertLongToDate(current, "ddMMMyyyy"));
         int incrementedValue;
         while (previous < current) {
             chunkCounter++;
@@ -189,7 +187,6 @@ public class ViewHistoryActivity extends AppCompatActivity {
             if (calendar.get(calendarChunkSize) == incrementedValue) {
                 break;
             }
-            Log.d("getXAxisincrement - date now: ", MarbleUtils.convertLongToDate(previous, "ddMMMyyyy"));
         }
 
         return chunkCounter;
@@ -212,7 +209,6 @@ public class ViewHistoryActivity extends AppCompatActivity {
             }
             previousDate = data.longDate;
             entries.add(new Entry(xCount, Float.valueOf(data.amount.substring(1))));
-            Log.d("graphTest - xCount", String.valueOf(xCount));
         }
 
         LineDataSet lineDataSet = new LineDataSet(entries, ""); // add entries to dataset

@@ -43,8 +43,6 @@ public class MarbleCalculator {
                 calendar.setTimeInMillis(date);
                 // get interval from calendar
                 currentInterval = calendar.get(calendarInterval);
-                Log.d(TAG, "previousInterval: " + previousInterval);
-                Log.d(TAG, "currentInterval: " + currentInterval);
                 if (intervalCount == 0) {
                     // no intervals have been counted yet, just add 1
                     intervalCount += 1;
@@ -65,8 +63,6 @@ public class MarbleCalculator {
                 previousInterval = currentInterval;
                 total += amount; // add up every value in DB
                 cursor.moveToNext();
-                // log values
-                Log.d(TAG, "intervalCount: " + intervalCount);
             }
         }
         cursor.close();
@@ -155,7 +151,6 @@ public class MarbleCalculator {
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 double value = Double.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(MarbleDBContract.Expenses.COLUMN_AMOUNT)));
-                Log.d(TAG, "value:  " + value);
                 spentThisWeek += value;
                 cursor.moveToNext();
             }
@@ -168,16 +163,13 @@ public class MarbleCalculator {
     public static double getTodaySpending(SQLiteDatabase database) {
         long date = 0;
         Calendar calendar = Calendar.getInstance();
-        Log.d(TAG, "getTodaysSpending - date before mod: " + calendar.getTimeInMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         try {
             date = calendar.getTimeInMillis();
-            Log.d(TAG, "getTodaysSpending - today's date: " + date);
         } catch (Exception e) {
-            Log.d(TAG, "exception caught!" + e.toString());
         }
         String[] projection = {};
 
@@ -194,19 +186,16 @@ public class MarbleCalculator {
                 null,                                     // don't filter by row groups
                 null                                      // don't sort
         );
-        Log.d(TAG, "The total cursor count is " + cursor.getCount());
 
         double total = 0;
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 double value = Double.valueOf(cursor.getString(2));
-                Log.d(TAG, "value:  " + value);
                 total += value;
                 cursor.moveToNext();
             }
         }
         cursor.close();
-        Log.d(TAG, "total:  " + total);
 
         return total;
     }

@@ -63,7 +63,6 @@ public class NewExpenseInput extends AppCompatActivity {
         // make sure we have at least 3 entries, otherwise write default values:
         if (mostUsedDescriptions[mostUsedDescriptions.length-1] == null) {
             // if last element is null, not enough descriptions to show most used yet, so show default
-            Log.d(TAG, "Writing default descriptions");
             mostUsedDescriptions = new String[] {"Lunch", "Gas", "Drinks"};
         }
         Button mostUsed1 = findViewById(R.id.editExpense_button_mostUsed1);

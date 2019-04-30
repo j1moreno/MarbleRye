@@ -45,11 +45,9 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
         public void bind(final HistoryData item, final OnItemClickListener listener) {
             date.setText(item.date);
             amount.setText(item.amount);
-            Log.d("ADAPTER", item.date);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);
-//                    Log.d("ADAPTER", item.date);
                 }
             });
 
@@ -69,11 +67,9 @@ public class MarbleRecycleAdapter extends RecyclerView.Adapter<MarbleRecycleAdap
             description.setText(item.description);
             date.setText(item.date);
             amount.setText(item.amount);
-            Log.d("ADAPTER", item.date);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);
-//                    Log.d("ADAPTER", item.date);
                 }
             });
 
