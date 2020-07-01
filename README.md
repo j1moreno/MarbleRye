@@ -7,6 +7,8 @@ Dead simple spending/expense tracker. Enter expenses, and application shows how 
 Inspiration for the name:
 https://www.youtube.com/watch?v=QfuuXwQMDyE
 
+Available on Google Play Store: https://play.google.com/store/apps/details?id=com.j1.marblerye
+
 ## Screenshots
 |||
 |------------|-------------|
